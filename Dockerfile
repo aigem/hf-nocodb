@@ -5,11 +5,12 @@ ARG NC_S3_ENDPOINT
 ARG NC_S3_ACCESS_KEY
 
 RUN apk add --no-cache git \
-    && git clone https://github.com/aigem/hf-nocodb.git /usr/src
+    && git clone https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
+    && cp /tmp/hf-nocodb/src/* /tmp/ \
+    && rm -rf /tmp/hf-nocodb
 
-
-COPY setup.sh s3_setup.sh /tmp/
-COPY docker/startup.sh /usr/src/appEntry/startup.sh
+COPY /tmp/setup.sh /tmp/s3_setup.sh /tmp/
+COPY /tmp/startup.sh /usr/src/appEntry/startup.sh
 
 RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
