@@ -7,17 +7,12 @@ ARG NC_S3_ACCESS_KEY
 RUN apk add --no-cache git \
     && git clone https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && cp /tmp/hf-nocodb/src/* /tmp/ \
-    && rm -rf /tmp/hf-nocodb
-
-COPY /tmp/setup.sh /tmp/s3_setup.sh /tmp/
-COPY /tmp/startup.sh /usr/src/appEntry/startup.sh
+    && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
+    && chmod +x /usr/src/appEntry/startup.sh /tmp/s3_setup.sh /tmp/setup.sh && rm -rf /tmp/hf-nocodb
 
 RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
-    /tmp/setup.sh && \
-    chmod +x /usr/src/appEntry/startup.sh && \
-    /tmp/s3_setup.sh && \
-    rm /tmp/setup.sh /tmp/s3_setup.sh
+    /tmp/setup.sh && /tmp/s3_setup.sh && rm /tmp/setup.sh /tmp/s3_setup.sh
 
 USER nocodb
 
@@ -27,9 +22,8 @@ WORKDIR /usr/src/app
 ENV LITESTREAM_S3_SKIP_VERIFY=false \
     LITESTREAM_RETENTION=1440h \
     LITESTREAM_RETENTION_CHECK_INTERVAL=72h \
-    LITESTREAM_SNAPSHOT_INTERVAL=24h \
+    LITESTREAM_SNAPSHOT_INTERVAL=12h \
     LITESTREAM_SYNC_INTERVAL=60s \
-    NC_DOCKER=0.6 \
     NC_TOOL_DIR=/usr/app/data/ \
     NODE_ENV=production \
     PORT=7860 \
