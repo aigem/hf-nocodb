@@ -69,7 +69,7 @@ HTTP_SERVER_PID=$!
 
 # 等待 http-server 启动
 for i in $(seq 1 30); do
-    if nc -z localhost 7862; then
+    if curl -s http://localhost:7862 > /dev/null; then
         log "http-server 已启动"
         break
     fi
@@ -77,7 +77,7 @@ for i in $(seq 1 30); do
     sleep 1
 done
 
-if ! nc -z localhost 7862; then
+if ! curl -s http://localhost:7862 > /dev/null; then
     log "http-server 启动失败"
     exit 1
 fi
@@ -88,7 +88,7 @@ TRAEFIK_PID=$!
 
 # 等待 Traefik 启动
 for i in $(seq 1 30); do
-    if nc -z localhost 7860; then
+    if curl -s http://localhost:7860 > /dev/null; then
         log "Traefik 已启动"
         break
     fi
@@ -96,7 +96,7 @@ for i in $(seq 1 30); do
     sleep 1
 done
 
-if ! nc -z localhost 7860; then
+if ! curl -s http://localhost:7860 > /dev/null; then
     log "Traefik 启动失败"
     exit 1
 fi
@@ -115,5 +115,7 @@ netstat -tuln | grep -E ':7861|:7862'
 
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
+
+
 
 
