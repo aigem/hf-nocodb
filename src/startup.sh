@@ -60,8 +60,8 @@ if ! redis-cli -p 6379 -a redis_password ping; then
     exit 1
 fi
 
-log "启动 serve 服务..."
-serve -l 7862 /path/to/your/static/files &
+log "启动 http-server 服务..."
+http-server /home/nocodb/static -p 7862 &
 
 log "启动 NocoDB..."
 /usr/src/appEntry/start.sh &
