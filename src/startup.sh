@@ -64,9 +64,7 @@ log "启动 http-server 服务..."
 mkdir -p /home/nocodb/static
 touch /home/nocodb/static/hi.txt
 echo "Hello from serve" > /home/nocodb/static/hi.txt
-touch /home/nocodb/static/index.html
-echo "<h1>欢迎使用 Serve 服务</h1>" > /home/nocodb/static/index.html
-http-server /home/nocodb/static -p 7862 --cors -d false --log-ip true &
+http-server /home/nocodb -p 7862 --cors --log-ip true &
 HTTP_SERVER_PID=$!
 
 # 等待 http-server 启动
