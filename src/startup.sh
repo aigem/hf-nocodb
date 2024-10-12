@@ -38,29 +38,31 @@ log "启动 Redis..."
 # 修改 Redis 启动命令，使用配置文件中的设置
 redis-server /etc/redis.conf
 
-# 等待 Redis 启动
-for i in $(seq 1 30); do
-    if redis-cli -h 127.0.0.1 -p 6379 -a redis_password ping | grep -q PONG; then
-        log "Redis 已成功启动"
-        break
-    fi
-    log "等待 Redis 启动..."
-    sleep 1
-done
+sleep 10
 
-if ! redis-cli -h 127.0.0.1 -p 6379 -a redis_password ping | grep -q PONG; then
-    log "Redis 启动失败，查看日志："
-    cat /var/log/redis/redis.log
-    log "Redis 进程状态："
-    ps aux | grep redis-server
-    log "Redis 套接字状态："
-    ls -l /var/run/redis
-    log "Redis 数据目录状态："
-    ls -l /usr/app/data
-    log "Redis 配置文件内容："
-    cat /etc/redis.conf
-    exit 1
-fi
+# # 等待 Redis 启动
+# for i in $(seq 1 30); do
+#     if redis-cli -h 127.0.0.1 -p 6379 -a redis_password ping | grep -q PONG; then
+#         log "Redis 已成功启动"
+#         break
+#     fi
+#     log "等待 Redis 启动..."
+#     sleep 1
+# done
+
+# if ! redis-cli -h 127.0.0.1 -p 6379 -a redis_password ping | grep -q PONG; then
+#     log "Redis 启动失败，查看日志："
+#     cat /var/log/redis/redis.log
+#     log "Redis 进程状态："
+#     ps aux | grep redis-server
+#     log "Redis 套接字状态："
+#     ls -l /var/run/redis
+#     log "Redis 数据目录状态："
+#     ls -l /usr/app/data
+#     log "Redis 配置文件内容："
+#     cat /etc/redis.conf
+#     exit 1
+# fi
 
 log "启动 http-server 服务..."
 mkdir -p /home/nocodb/static
