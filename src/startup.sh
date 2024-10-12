@@ -61,8 +61,8 @@ if ! redis-cli -p 6379 -a redis_password ping; then
 fi
 
 log "启动 http-server 服务..."
-mkdir -p /home/nocodb/static/serve
-echo "Hello from serve" > /home/nocodb/static/serve/index.html
+mkdir -p /home/nocodb/static
+echo "Hello from serve" > /home/nocodb/static/index.html
 http-server /home/nocodb/static -p 7862 &
 
 log "启动 NocoDB..."

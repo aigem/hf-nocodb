@@ -7,7 +7,7 @@ http:
       rule: "PathPrefix(`/serve`)"
       service: serve
       middlewares:
-        - stripprefix
+        - serve-stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -18,7 +18,7 @@ http:
         servers:
           - url: "http://localhost:7862"
   middlewares:
-    stripprefix:
+    serve-stripprefix:
       stripPrefix:
         prefixes:
           - "/serve"
