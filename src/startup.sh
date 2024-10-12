@@ -60,5 +60,11 @@ if ! redis-cli -p 6379 -a redis_password ping; then
     exit 1
 fi
 
-log "启动主程序..."
-exec /usr/src/appEntry/start.sh
+log "启动 serve 服务..."
+serve -l 7862 /path/to/your/static/files &
+
+log "启动 NocoDB..."
+/usr/src/appEntry/start.sh &
+
+log "启动 Traefik..."
+exec traefik --configfile=/home/nocodb/app/traefik/traefik.yml

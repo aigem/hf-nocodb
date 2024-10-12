@@ -1,0 +1,17 @@
+http:
+  routers:
+    nocodb:
+      rule: "PathPrefix(`/`)"
+      service: nocodb
+    serve:
+      rule: "PathPrefix(`/serve`)"
+      service: serve
+  services:
+    nocodb:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:7861"
+    serve:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:7862"

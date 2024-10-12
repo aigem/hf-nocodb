@@ -1,0 +1,15 @@
+entryPoints:
+  web:
+    address: ":7860"
+
+providers:
+  file:
+    filename: /home/nocodb/app/traefik/dynamic_conf.yml
+
+api:
+  insecure: true
+
+log:
+  level: DEBUG
+
+accessLog: {}
