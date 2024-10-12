@@ -1,11 +1,13 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`)"
+      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`)"
       service: nocodb
     serve:
       rule: "PathPrefix(`/serve`)"
       service: serve
+      middlewares:
+        - stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -15,3 +17,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://localhost:7862"
+  middlewares:
+    stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/serve"

@@ -46,4 +46,8 @@ cp /tmp/dynamic_conf.yml /home/nocodb/app/traefik/dynamic_conf.yml
 chown -R nocodb:nocodb /home/nocodb/app/traefik
 chmod 644 /home/nocodb/app/traefik/traefik.yml /home/nocodb/app/traefik/dynamic_conf.yml
 
+# 创建静态文件目录
+mkdir -p /home/nocodb/static/serve
+chown -R nocodb:nocodb /home/nocodb/static
+
 echo "NocoDB 安装初始化完成"
