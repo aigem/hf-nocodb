@@ -12,11 +12,11 @@ http:
     nocodb:
       loadBalancer:
         servers:
-          - url: "http://localhost:7861"
+          - url: "http://127.0.0.1:7861"
     serve:
       loadBalancer:
         servers:
-          - url: "http://localhost:7862"
+          - url: "http://127.0.0.1:7862"
   middlewares:
     serve-stripprefix:
       stripPrefix:

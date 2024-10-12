@@ -65,11 +65,41 @@ mkdir -p /home/nocodb/static
 touch /home/nocodb/static/hi.txt
 echo "Hello from serve" > /home/nocodb/static/hi.txt
 http-server /home/nocodb/static -p 7862 --cors -d false -i false --log-ip true &
+HTTP_SERVER_PID=$!
 
-sleep 2  # 给 http-server 一些启动时间
+# 等待 http-server 启动
+for i in $(seq 1 30); do
+    if nc -z localhost 7862; then
+        log "http-server 已启动"
+        break
+    fi
+    log "等待 http-server 启动..."
+    sleep 1
+done
+
+if ! nc -z localhost 7862; then
+    log "http-server 启动失败"
+    exit 1
+fi
 
 log "启动 Traefik..."
 traefik --configfile=/home/nocodb/app/traefik/traefik.yml &
+TRAEFIK_PID=$!
+
+# 等待 Traefik 启动
+for i in $(seq 1 30); do
+    if nc -z localhost 7860; then
+        log "Traefik 已启动"
+        break
+    fi
+    log "等待 Traefik 启动..."
+    sleep 1
+done
+
+if ! nc -z localhost 7860; then
+    log "Traefik 启动失败"
+    exit 1
+fi
 
 log "检查 Traefik 配置文件..."
 if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/traefik/dynamic_conf.yml" ]; then
