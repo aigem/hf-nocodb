@@ -66,7 +66,7 @@ touch /home/nocodb/static/hi.txt
 echo "Hello from serve" > /home/nocodb/static/hi.txt
 touch /home/nocodb/static/index.html
 echo "<h1>欢迎使用 Serve 服务</h1>" > /home/nocodb/static/index.html
-http-server /home/nocodb/static -p 7862 --cors -d false -i false --log-ip true &
+http-server /home/nocodb/static -p 7862 --cors -d false --log-ip true &
 HTTP_SERVER_PID=$!
 
 # 等待 http-server 启动
