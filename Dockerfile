@@ -1,7 +1,9 @@
 FROM nocodb/nocodb:latest
 
+ARG CACHEBUST=1
+
 RUN apk add --no-cache git curl nodejs npm \
-    && git clone -b dev https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
+    && git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && cp /tmp/hf-nocodb/src/* /tmp/ \
     && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && chmod +x /usr/src/appEntry/startup.sh /tmp/setup.sh /tmp/Cronicle_setup.sh \
@@ -21,7 +23,7 @@ ENV NC_DB="pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb" \
     PORT=7861 \
     NC_ALLOW_LOCAL_HOOKS=true \
     NC_REDIS_URL="redis://:redis_password@localhost:6379/4"
-    
+
 ARG CRONICLE_PORT=7863 \
     CRONICLE_base_dir=/opt/cronicle \
     CRONICLE_VER=0.9.60
