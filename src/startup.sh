@@ -90,17 +90,18 @@ sleep 10
 
 log "启动 Cronicle..."
 ${CRONICLE_base_dir}/bin/control.sh version
-${CRONICLE_base_dir}/bin/control.sh start
+${CRONICLE_base_dir}/bin/control.sh start &
 
 # 等待 Cronicle 启动
-for i in $(seq 1 60); do
+for i in $(seq 1 30); do
     if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
         log "Cronicle 已启动"
         break
     fi
-    ${CRONICLE_base_dir}/bin/control.sh status
-    sleep 2
+    sleep 1
 done
+
+${CRONICLE_base_dir}/bin/control.sh status
 
 if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
     log "Cronicle 启动失败，查看日志以获取更多信息"
