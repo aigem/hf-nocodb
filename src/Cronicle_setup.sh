@@ -16,27 +16,33 @@ chown -R ${USER}:${USER} ${CRONICLE_base_dir}
 # 设置 Cronicle 配置
 cat << EOF > ${CRONICLE_base_dir}/conf/config.json
 {
-  "base_app_url": "http://127.0.0.1:7863",
+  "base_app_url": "http://127.0.0.1:${CRONICLE_PORT}",
   "server_hostname": "127.0.0.1",
-  "server_port": 7863,
+  "server_port": ${CRONICLE_PORT},
   "web_socket_use_hostnames": false,
-  "base_dir": "/opt/cronicle",
-  "log_dir": "/opt/cronicle/logs",
-  "conf_dir": "/opt/cronicle/conf",
-  "data_dir": "/opt/cronicle/data",
-  "plugins_dir": "/opt/cronicle/plugins",
-  "pid_file": "/opt/cronicle/logs/cronicled.pid",
+  "base_dir": "${CRONICLE_base_dir}",
+  "log_dir": "${CRONICLE_base_dir}/logs",
+  "conf_dir": "${CRONICLE_base_dir}/conf",
+  "data_dir": "${CRONICLE_base_dir}/data",
+  "plugins_dir": "${CRONICLE_base_dir}/plugins",
+  "pid_file": "${CRONICLE_base_dir}/logs/cronicled.pid",
   "secret_key": "CHANGE_THIS",
   "Storage": {
     "engine": "Filesystem",
     "Filesystem": {
-      "base_dir": "data",
+      "base_dir": "${CRONICLE_base_dir}/data",
       "key_namespaces": 1
     }
-  },  
+  },
   "WebServer": {
-    "http_port": 7863
-  }
+    "http_port": ${CRONICLE_PORT},
+    "http_bind_address": "127.0.0.1"
+  },
+  "job_data_expire_days": 180,
+  "child_kill_timeout": 10,
+  "dead_job_timeout": 120,
+  "master_ping_freq": 20,
+  "master_ping_timeout": 60
 }
 EOF
 
@@ -69,12 +75,12 @@ cat << EOF > ${CRONICLE_base_dir}/conf/setup.json
     ["listPush", "global/server_groups", {
       "id": "maingrp",
       "title": "Primary Group",
-      "regexp": "_HOSTNAME_"
+      "regexp": ".*"
     }],
     ["listCreate", "global/servers", {}],
     ["listPush", "global/servers", {
-      "hostname": "_HOSTNAME_",
-      "ip": "_IP_"
+      "hostname": "127.0.0.1",
+      "ip": "127.0.0.1"
     }],
     ["listCreate", "global/schedule", {}],
     ["listCreate", "global/api_keys", {}]

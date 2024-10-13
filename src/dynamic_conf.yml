@@ -25,7 +25,7 @@ http:
     cronicle:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:7863"
+          - url: "http://127.0.0.1:${CRONICLE_PORT}"
   middlewares:
     serve-stripprefix:
       stripPrefix:
