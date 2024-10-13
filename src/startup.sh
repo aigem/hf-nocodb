@@ -92,21 +92,5 @@ ${CRONICLE_base_dir}/bin/control.sh start
 sleep 15
 ${CRONICLE_base_dir}/bin/control.sh status
 
-# 等待 Cronicle 启动
-for i in $(seq 1 60); do
-    if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-        log "Cronicle 已启动"
-        break
-    fi
-    log "等待 Cronicle 启动...（尝试 $i/60）"
-    sleep 2
-done
-
-if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-    log "Cronicle 启动失败，查看日志以获取更多信息"
-    cat ${CRONICLE_base_dir}/logs/error.log
-    exit 1
-fi
-
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
