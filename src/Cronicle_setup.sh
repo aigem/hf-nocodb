@@ -5,6 +5,7 @@ echo "安装Cronicle开始"
 
 # 安装 Cronicle
 mkdir -p ${CRONICLE_base_dir} ${CRONICLE_base_dir}/logs ${CRONICLE_base_dir}/data ${CRONICLE_base_dir}/plugins ${CRONICLE_base_dir}/conf
+chown -R ${USER}:${USER} ${CRONICLE_base_dir}
 
 # 设置 Cronicle 配置
 cat << EOF > ${CRONICLE_base_dir}/conf/config.json
@@ -38,7 +39,7 @@ npm install --omit=dev
 node bin/build.js dist
 
 # 初始化存储
-node bin/storage-cli.js setup
+${CRONICLE_base_dir}/bin/control.sh setup
 
 # 创建管理员用户
 node bin/storage-cli.js admin --create --username admin --password admin123
