@@ -22,6 +22,8 @@ cat << EOF > ${CRONICLE_base_dir}/conf/config.json
   "web_socket_use_hostnames": false,
   "base_dir": "${CRONICLE_base_dir}",
   "log_dir": "${CRONICLE_base_dir}/logs",
+  "log_filename": "cronicled.log",
+  "debug_level": 10,
   "conf_dir": "${CRONICLE_base_dir}/conf",
   "data_dir": "${CRONICLE_base_dir}/data",
   "plugins_dir": "${CRONICLE_base_dir}/plugins",
@@ -42,7 +44,8 @@ cat << EOF > ${CRONICLE_base_dir}/conf/config.json
   "child_kill_timeout": 10,
   "dead_job_timeout": 120,
   "master_ping_freq": 20,
-  "master_ping_timeout": 60
+  "master_ping_timeout": 60,
+  "web_socket_use_hostnames": true
 }
 EOF
 

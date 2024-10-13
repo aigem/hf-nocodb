@@ -86,6 +86,8 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
     exit 1
 fi
 
+sleep 10
+
 log "启动 Cronicle..."
 ${CRONICLE_base_dir}/bin/control.sh version
 ${CRONICLE_base_dir}/bin/control.sh start
@@ -102,8 +104,12 @@ done
 
 if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
     log "Cronicle 启动失败，查看日志以获取更多信息"
-    cat ${CRONICLE_base_dir}/logs/error.log
-    break
+    # 打印日志，如果日志文件不存在，则打印错误信息
+    if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
+        cat ${CRONICLE_base_dir}/logs/cronicled.log
+    else
+        log "日志文件不存在"
+    fi
 fi
 
 ${CRONICLE_base_dir}/bin/control.sh status
