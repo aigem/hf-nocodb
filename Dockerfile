@@ -1,42 +1,29 @@
 FROM nocodb/nocodb:latest
 
-ARG NC_S3_REGION
-ARG NC_S3_ENDPOINT
-ARG NC_S3_ACCESS_KEY
-
-RUN apk add --no-cache git \
+RUN apk add --no-cache git curl nodejs npm \
     && git clone -b dev https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && cp /tmp/hf-nocodb/src/* /tmp/ \
     && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
-    && chmod +x /usr/src/appEntry/startup.sh /tmp/s3_setup.sh /tmp/setup.sh && rm -rf /tmp/hf-nocodb
-
-RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
-    --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
-    /tmp/setup.sh && /tmp/s3_setup.sh && rm /tmp/setup.sh /tmp/s3_setup.sh
+    && chmod +x /usr/src/appEntry/startup.sh /tmp/setup.sh /tmp/Cronicle_setup.sh \
+    && /tmp/setup.sh \
+    && /tmp/Cronicle_setup.sh \
+    && rm -rf /tmp/hf-nocodb /tmp/setup.sh /tmp/Cronicle_setup.sh
 
 USER nocodb
 
 WORKDIR /usr/src/app
 
 # 设置环境变量
-ENV LITESTREAM_S3_SKIP_VERIFY=false \
-    LITESTREAM_RETENTION=1440h \
-    LITESTREAM_RETENTION_CHECK_INTERVAL=72h \
-    LITESTREAM_SNAPSHOT_INTERVAL=12h \
-    LITESTREAM_SYNC_INTERVAL=60s \
+ENV NC_DB="pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb" \
+    NC_AUTH_JWT_SECRET=nocodb_jwt_secret \
     NC_TOOL_DIR=/usr/app/data/ \
     NODE_ENV=production \
     PORT=7861 \
     NC_ALLOW_LOCAL_HOOKS=true \
     NC_REDIS_URL="redis://:redis_password@localhost:6379/4" \
-    NC_S3_REGION=${NC_S3_REGION} \
-    NC_S3_ENDPOINT=${NC_S3_ENDPOINT} \
-    NC_S3_ACCESS_KEY=${NC_S3_ACCESS_KEY} \
-    LITESTREAM_S3_REGION=${NC_S3_REGION} \
-    LITESTREAM_S3_ENDPOINT=${NC_S3_ENDPOINT} \
-    LITESTREAM_S3_ACCESS_KEY_ID=${NC_S3_ACCESS_KEY}
-
-ENV $(source /etc/profile.d/s3_env.sh && env | grep '^S3_' | xargs)
+    CRONICLE_PORT=7863 \
+    CRONICLE_base_dir=/opt/cronicle \
+    CRONICLE_VER=0.9.60
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["/usr/src/appEntry/startup.sh"]

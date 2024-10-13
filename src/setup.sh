@@ -7,7 +7,7 @@ mkdir -p /usr/app/data /run/postgresql /var/log/redis /var/log/postgresql /var/r
 chown -R nocodb:nocodb /usr/app /usr/src/app /usr /run/postgresql /var/log/redis /var/log/postgresql /var/log /home/nocodb/app/traefik /home/nocodb/static
 
 # 安装软件包
-apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget
+apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget curl tzdata
 
 # 安装 http-server
 npm install -g http-server

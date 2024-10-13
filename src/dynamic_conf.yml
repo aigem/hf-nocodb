@@ -8,6 +8,11 @@ http:
       service: serve
       middlewares:
         - serve-stripprefix
+    cronicle:
+      rule: "PathPrefix(`/cronicle`)"
+      service: cronicle
+      middlewares:
+        - cronicle-stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -17,8 +22,16 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:7862"
+    cronicle:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:7863"
   middlewares:
     serve-stripprefix:
       stripPrefix:
         prefixes:
           - "/serve"
+    cronicle-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/cronicle"

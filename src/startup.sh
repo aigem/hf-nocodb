@@ -38,27 +38,6 @@ log "启动 Redis..."
 # 取消注释并修改 Redis 启动命令
 redis-server /etc/redis.conf --port 6379 --daemonize yes
 
-# # 等待 Redis 启动
-# for i in $(seq 1 30); do
-#     if redis-cli -p 6379 ping | grep -q PONG; then
-#         log "Redis 已成功启动"
-#         break
-#     fi
-#     log "等待 Redis 启动..."
-#     sleep 1
-# done
-
-# if ! redis-cli -p 6379 ping | grep -q PONG; then
-#     log "Redis 启动失败，查看日志："
-#     cat /var/log/redis/redis.log
-#     log "Redis 进程状态："
-#     ps aux | grep redis-server
-#     log "Redis 套接字状态："
-#     ls -l /var/run/redis
-#     log "Redis 数据目录状态："
-#     ls -l /usr/app/data
-#     exit 1
-# fi
 
 log "启动 http-server 服务..."
 mkdir -p /home/nocodb/static
@@ -107,9 +86,24 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
     exit 1
 fi
 
+log "启动 Cronicle..."
+${CRONICLE_base_dir}/bin/control.sh start &
+CRONICLE_PID=$!
+
+# 等待 Cronicle 启动
+for i in $(seq 1 30); do
+    if curl -s http://localhost:7863 > /dev/null; then
+        log "Cronicle 已启动"
+        break
+    fi
+    log "等待 Cronicle 启动..."
+    sleep 1
+done
+
+if ! curl -s http://localhost:7863 > /dev/null; then
+    log "Cronicle 启动失败"
+    exit 1
+fi
+
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
-
-
-
-

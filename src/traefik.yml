@@ -10,4 +10,4 @@ api:
   insecure: true
 
 log:
-  level: DEBUG
+  level: INFO
