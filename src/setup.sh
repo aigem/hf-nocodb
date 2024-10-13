@@ -40,6 +40,7 @@ mv traefik /usr/local/bin/
 rm traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz
 
 # 复制 Traefik 配置文件
+mkdir -p /home/nocodb/app/traefik
 cp /tmp/traefik.yml /home/nocodb/app/traefik/traefik.yml
 cp /tmp/dynamic_conf.yml /home/nocodb/app/traefik/dynamic_conf.yml
 
