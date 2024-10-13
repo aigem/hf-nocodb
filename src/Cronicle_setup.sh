@@ -4,8 +4,7 @@ set -e
 echo "安装Cronicle开始"
 
 # 安装 Cronicle
-mkdir -p ${CRONICLE_base_dir} ${CRONICLE_base_dir}/{logs,data,plugins,conf}
-chown -R ${USER}:${USER} ${CRONICLE_base_dir}
+mkdir -p ${CRONICLE_base_dir} ${CRONICLE_base_dir}/logs ${CRONICLE_base_dir}/data ${CRONICLE_base_dir}/plugins ${CRONICLE_base_dir}/conf
 
 # 设置 Cronicle 配置
 cat << EOF > ${CRONICLE_base_dir}/conf/config.json
