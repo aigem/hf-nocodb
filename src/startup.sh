@@ -87,7 +87,10 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
 fi
 
 log "启动 Cronicle..."
+${CRONICLE_base_dir}/bin/control.sh status
 ${CRONICLE_base_dir}/bin/control.sh start
+sleep 15
+${CRONICLE_base_dir}/bin/control.sh status
 
 # 等待 Cronicle 启动
 for i in $(seq 1 60); do
