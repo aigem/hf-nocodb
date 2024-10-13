@@ -29,13 +29,56 @@ cat << EOF > ${CRONICLE_base_dir}/conf/config.json
   "secret_key": "CHANGE_THIS",
   "Storage": {
     "engine": "Filesystem",
-    "list_page_size": 50,
-    "concurrency": 4,
-    "base_dir": "${CRONICLE_base_dir}/data"
-  },
+    "Filesystem": {
+      "base_dir": "data",
+      "key_namespaces": 1
+    }
+  },  
   "WebServer": {
     "http_port": ${CRONICLE_PORT}
   }
+}
+EOF
+
+# 创建 setup.json 文件
+cat << EOF > ${CRONICLE_base_dir}/conf/setup.json
+{
+  "storage": [
+    ["put", "users/admin", {
+      "username": "admin",
+      "password": "$2a$10$VAF.FNvz1JqhCAB5rCh9GOa965eYWH3fcgWIuQFAmsZnnVS/.ye1y",
+      "full_name": "Administrator",
+      "email": "admin@cronicle.com",
+      "active": 1,
+      "modified": 1434125333,
+      "created": 1434125333,
+      "salt": "salty",
+      "privileges": {
+        "admin": 1
+      }
+    }],
+    ["listCreate", "global/users", {
+      "page_size": 100
+    }],
+    ["listPush", "global/users", {
+      "username": "admin"
+    }],
+    ["listCreate", "global/plugins", {}],
+    ["listCreate", "global/categories", {}],
+    ["listCreate", "global/server_groups", {}],
+    ["listPush", "global/server_groups", {
+      "id": "maingrp",
+      "title": "Primary Group",
+      "regexp": "_HOSTNAME_"
+    }],
+    ["listCreate", "global/servers", {}],
+    ["listPush", "global/servers", {
+      "hostname": "_HOSTNAME_",
+      "ip": "_IP_"
+    }],
+    ["listCreate", "global/schedule", {}],
+    ["listCreate", "global/api_keys", {}]
+  ]
 }
 EOF
 
