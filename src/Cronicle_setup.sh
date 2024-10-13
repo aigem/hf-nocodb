@@ -95,7 +95,9 @@ node bin/build.js dist
 # 初始化存储
 ${CRONICLE_base_dir}/bin/control.sh setup
 
-# 创建管理员用户
-node bin/storage-cli.js admin --create --username admin --password admin123
+# 创建管理员用户（如果需要）
+if ! ${CRONICLE_base_dir}/bin/storage-cli.js get users/admin > /dev/null 2>&1; then
+    ${CRONICLE_base_dir}/bin/storage-cli.js admin admin admin123 admin@example.com
+fi
 
 echo "Cronicle 安装和初始化完成"
