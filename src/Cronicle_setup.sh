@@ -16,7 +16,7 @@ chown -R ${USER}:${USER} ${CRONICLE_base_dir}
 # 设置 Cronicle 配置
 cat << EOF > ${CRONICLE_base_dir}/conf/config.json
 {
-  "base_app_url": "localhost",
+  "base_app_url": "http://localhost:${CRONICLE_PORT}",
   "server_hostname": "localhost",
   "server_port": ${CRONICLE_PORT},
   "web_socket_use_hostnames": false,
