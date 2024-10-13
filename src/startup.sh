@@ -96,14 +96,14 @@ for i in $(seq 1 60); do
         log "Cronicle 已启动"
         break
     fi
-    log "等待 Cronicle 启动...（尝试 $i/60）"
+    ${CRONICLE_base_dir}/bin/control.sh status
     sleep 2
 done
 
 if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
     log "Cronicle 启动失败，查看日志以获取更多信息"
     cat ${CRONICLE_base_dir}/logs/error.log
-    exit 1
+    break
 fi
 
 ${CRONICLE_base_dir}/bin/control.sh status
