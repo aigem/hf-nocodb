@@ -16,16 +16,16 @@ chown -R ${USER}:${USER} ${CRONICLE_base_dir}
 # 设置 Cronicle 配置
 cat << EOF > ${CRONICLE_base_dir}/conf/config.json
 {
-  "base_app_url": "http://localhost:${CRONICLE_PORT}",
+  "base_app_url": "http://localhost:7863",
   "server_hostname": "localhost",
-  "server_port": ${CRONICLE_PORT},
+  "server_port": 7863,
   "web_socket_use_hostnames": false,
-  "base_dir": "${CRONICLE_base_dir}",
-  "log_dir": "${CRONICLE_base_dir}/logs",
-  "conf_dir": "${CRONICLE_base_dir}/conf",
-  "data_dir": "${CRONICLE_base_dir}/data",
-  "plugins_dir": "${CRONICLE_base_dir}/plugins",
-  "pid_file": "${CRONICLE_base_dir}/conf/cronicled.pid",
+  "base_dir": "/opt/cronicle",
+  "log_dir": "/opt/cronicle/logs",
+  "conf_dir": "/opt/cronicle/conf",
+  "data_dir": "/opt/cronicle/data",
+  "plugins_dir": "/opt/cronicle/plugins",
+  "pid_file": "/opt/cronicle/conf/cronicled.pid",
   "secret_key": "CHANGE_THIS",
   "Storage": {
     "engine": "Filesystem",
@@ -35,7 +35,7 @@ cat << EOF > ${CRONICLE_base_dir}/conf/config.json
     }
   },  
   "WebServer": {
-    "http_port": ${CRONICLE_PORT}
+    "http_port": 7863
   }
 }
 EOF

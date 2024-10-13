@@ -89,8 +89,13 @@ fi
 log "启动 Cronicle..."
 ${CRONICLE_base_dir}/bin/control.sh version
 ${CRONICLE_base_dir}/bin/control.sh start &
-sleep 15
+sleep 20
 ${CRONICLE_base_dir}/bin/control.sh status
+cat /opt/cronicle/logs/cronicled.log
+if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+    log "Cronicle 启动失败"
+fi
+
 
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
