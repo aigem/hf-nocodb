@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "安装Cronicle开始"
+
 cronicle_version=${CRONICLE_VER}
 cronicle_basedir=${CRONICLE_base_dir}
 

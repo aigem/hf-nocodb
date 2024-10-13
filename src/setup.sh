@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "安装初始化开始"
+
 # 创建用户和目录
 adduser -D -u 1000 nocodb
 mkdir -p /usr/app/data /run/postgresql /var/log/redis /var/log/postgresql /var/run/redis /home/nocodb/app/traefik /home/nocodb/static
