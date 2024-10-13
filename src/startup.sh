@@ -87,21 +87,21 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
 fi
 
 log "启动 Cronicle..."
-${CRONICLE_base_dir}/bin/control.sh start &
-CRONICLE_PID=$!
+${CRONICLE_base_dir}/bin/control.sh start
 
 # 等待 Cronicle 启动
-for i in $(seq 1 30); do
-    if curl -s http://localhost:7863 > /dev/null; then
+for i in $(seq 1 60); do
+    if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
         log "Cronicle 已启动"
         break
     fi
-    log "等待 Cronicle 启动..."
-    sleep 1
+    log "等待 Cronicle 启动...（尝试 $i/60）"
+    sleep 2
 done
 
-if ! curl -s http://localhost:7863 > /dev/null; then
-    log "Cronicle 启动失败"
+if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+    log "Cronicle 启动失败，查看日志以获取更多信息"
+    cat ${CRONICLE_base_dir}/logs/error.log
     exit 1
 fi
 
