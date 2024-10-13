@@ -3,8 +3,14 @@ set -e
 
 echo "安装Cronicle开始"
 
-# 安装 Cronicle
-mkdir -p ${CRONICLE_base_dir} ${CRONICLE_base_dir}/logs ${CRONICLE_base_dir}/data ${CRONICLE_base_dir}/plugins ${CRONICLE_base_dir}/conf
+# 创建必要的目录
+mkdir -p ${CRONICLE_base_dir} \
+         ${CRONICLE_base_dir}/logs \
+         ${CRONICLE_base_dir}/data \
+         ${CRONICLE_base_dir}/plugins \
+         ${CRONICLE_base_dir}/conf
+
+# 设置目录权限
 chown -R ${USER}:${USER} ${CRONICLE_base_dir}
 
 # 设置 Cronicle 配置
@@ -33,9 +39,14 @@ cat << EOF > ${CRONICLE_base_dir}/conf/config.json
 }
 EOF
 
+# 下载并解压 Cronicle
 cd ${CRONICLE_base_dir}
 curl -L https://github.com/jhuckaby/Cronicle/archive/v${CRONICLE_VER}.tar.gz | tar zxvf - --strip-components 1
+
+# 安装依赖
 npm install --omit=dev
+
+# 构建 Cronicle
 node bin/build.js dist
 
 # 初始化存储
