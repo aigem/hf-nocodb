@@ -88,6 +88,12 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
 fi
 sleep 5
 
+log "启动 API 执行脚本..."
+node /home/nocodb/app/traefik/api-exec.js > /home/nocodb/static/api-exec.log 2>&1 &
+API_EXEC_PID=$!
+sleep 1
+log "API 执行进程 ID: $API_EXEC_PID"
+
 log "启动 Remix 应用..."
 log "加载 .env 文件"
 export $(grep -v '^#' /usr/src/app/smartcode/.env | xargs)

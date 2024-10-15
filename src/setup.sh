@@ -45,6 +45,8 @@ rm traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz
 mkdir -p /home/nocodb/app/traefik
 cp /tmp/traefik.yml /home/nocodb/app/traefik/traefik.yml
 cp /tmp/dynamic_conf.yml /home/nocodb/app/traefik/dynamic_conf.yml
+cp /tmp/api-exec-script.sh /home/nocodb/app/traefik/api-exec-script.sh
+cp /tmp/api-exec.js /home/nocodb/app/traefik/api-exec.js
 
 chown -R nocodb:nocodb /home/nocodb/app/traefik
 chmod 644 /home/nocodb/app/traefik/traefik.yml /home/nocodb/app/traefik/dynamic_conf.yml

@@ -21,6 +21,11 @@ http:
       service: smartcode
       middlewares:
         - smartcode-stripprefix
+    api-exec:
+      rule: "PathPrefix(`/api-exec`)"
+      service: api-exec
+      middlewares:
+        - api-exec-stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -38,6 +43,10 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:7864"
+    api-exec:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3000"
   middlewares:
     serve-stripprefix:
       stripPrefix:
@@ -51,3 +60,8 @@ http:
       stripPrefix:
         prefixes:
           - "/smartcode"
+    api-exec-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/api-exec"
+
