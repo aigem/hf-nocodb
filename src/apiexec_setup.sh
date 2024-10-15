@@ -19,6 +19,10 @@ cd /home/nocodb/app/api-exec || {
 echo "安装所有依赖，包括开发依赖"
 npm install
 
+# 确保 webpack-cli 已安装
+echo "确保 webpack-cli 已安装"
+npm install -D webpack-cli
+
 # 构建项目
 echo "构建项目"
 npm run build
