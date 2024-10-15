@@ -18,6 +18,7 @@ http:
       service: smartcode
       middlewares:
         - smartcode-stripprefix
+        - smartcode-prefix
   services:
     nocodb:
       loadBalancer:
@@ -48,3 +49,6 @@ http:
       stripPrefix:
         prefixes:
           - "/smartcode"
+    smartcode-prefix:
+      addPrefix:
+        prefix: "/smartcode"
