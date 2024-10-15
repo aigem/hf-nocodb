@@ -105,7 +105,7 @@ if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
 fi
 
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production PORT=7864 nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
+NODE_ENV=production PORT=7864 node build/server/index.js > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"

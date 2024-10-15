@@ -24,10 +24,8 @@ cd /usr/src/app/smartcode || {
     exit 1
 }
 
-
-echo "安装依赖"
-export NODE_ENV=development
-pnpm install
+echo "安装所有依赖，包括开发依赖"
+pnpm install --production=false
 
 echo "创建 .env 文件"
 cat << EOF > .env
@@ -35,15 +33,13 @@ API_KEY=your_api_key_here
 SESSION_SECRET=11223344556677889900
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
+NODE_ENV=production
 EOF
 
 # 构建项目
 echo "构建项目"
 NODE_ENV=production pnpm run build
 
-# 确保 start 脚本正确设置
-echo "更新 package.json 的 start 脚本"
-sed -i 's/"start": ".*"/"start": "node build\/server\/index.js"/' package.json
 
 # 添加这个检查
 if [ -f .env ]; then
