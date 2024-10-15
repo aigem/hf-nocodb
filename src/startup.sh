@@ -107,7 +107,7 @@ fi
 
 sleep 2
 
-启动_Cronicle() {
+run_Cronicle() {
     log "启动 Cronicle..."
     ${CRONICLE_base_dir}/bin/control.sh version
     ${CRONICLE_base_dir}/bin/control.sh start &
@@ -137,7 +137,7 @@ sleep 2
 }
 
 # 如果需要启动 Cronicle，取消下面这行的注释
-# 启动_Cronicle
+# run_Cronicle
 
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh

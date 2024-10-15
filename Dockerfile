@@ -9,12 +9,12 @@ ENV WORKDIR=/usr/src/app \
     NODE_ENV=production \
     PORT=7861 \
     NC_ALLOW_LOCAL_HOOKS=true \
-    NC_REDIS_URL="redis://:redis_password@localhost:6379/4" \
-    CRONICLE_PORT=7863 \
-    CRONICLE_base_dir=/opt/cronicle \
-    CRONICLE_VER=0.9.60
+    NC_REDIS_URL="redis://:redis_password@localhost:6379/4"
+    # CRONICLE_PORT=7863 \
+    # CRONICLE_base_dir=/opt/cronicle \
+    # CRONICLE_VER=0.9.60
 
-RUN apk add --no-cache git curl nodejs npm
+RUN apk add --no-cache git curl nodejs npm pnpm pm2
 
 ARG CACHEBUST=1
 
@@ -26,9 +26,8 @@ RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 安装 cronicle
     # && /tmp/Cronicle_setup.sh \
     # 安装 smartcode
-    && git clone -b main https://github.com/aigem/smartcode.git /usr/src/app/smartcode \
-    && ls -l /usr/src/app/smartcode \
-    && rm -rf /tmp/hf-nocodb /tmp/setup.sh /tmp/Cronicle_setup.sh
+    && /tmp/remix_setup.sh \
+    && rm -rf /tmp/hf-nocodb /tmp/setup.sh /tmp/Cronicle_setup.sh /tmp/remix_setup.sh
 
 USER ${USER}
 
