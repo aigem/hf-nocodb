@@ -98,7 +98,22 @@ if [ ! -f "package.json" ]; then
     exit 1
 fi
 
-PORT=7864 node build/server/index.js &
+if [ ! -f ".env" ]; then
+    log ".env 文件不存在，创建新的 .env 文件"
+    cat << EOF > .env
+API_KEY=your_api_key_here
+SESSION_SECRET=11223344556677889900
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin
+EOF
+fi
+
+log "加载 .env 文件"
+export $(grep -v '^#' .env | xargs)
+
+log "SESSION_SECRET: $SESSION_SECRET"
+
+PORT=7864 node -r dotenv/config build/server/index.js &
 REMIX_PID=$!
 
 # 等待 Remix 应用启动

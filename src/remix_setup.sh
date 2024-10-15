@@ -4,7 +4,7 @@ set -e
 echo "安装、配置 Remix 开始"
 
 # 全局安装 pnpm
-npm install -g pnpm dotenv
+npm install -g pnpm
 
 # 克隆项目
 echo "克隆 Remix 项目到 /usr/src/app/smartcode"
@@ -28,6 +28,7 @@ cd /usr/src/app/smartcode || {
 echo "安装依赖"
 export NODE_ENV=development
 pnpm install
+pnpm add dotenv
 
 echo "创建 .env 文件"
 cat << EOF > .env
@@ -40,7 +41,6 @@ EOF
 # 添加这个检查
 if [ -f .env ]; then
     echo ".env 文件已成功创建"
-    cat .env
 else
     echo "警告：.env 文件未能创建"
 fi
@@ -49,5 +49,3 @@ fi
 pnpm build
 
 echo "Remix 安装和初始化完成"
-# 修改这一行来显示所有文件，包括隐藏文件
-ls -la /usr/src/app/smartcode
