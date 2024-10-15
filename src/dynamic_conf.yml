@@ -1,26 +1,13 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/api-exec`) && !PathPrefix(`/smartcode`)"
+      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/api-exec`)"
       service: nocodb
     serve:
       rule: "PathPrefix(`/serve`)"
       service: serve
       middlewares:
         - serve-stripprefix
-    cronicle:
-      rule: "PathPrefix(`/cronicle`)"
-      service: cronicle
-      middlewares:
-        - cronicle-stripprefix
-    smartcode-assets:
-      rule: "PathPrefix(`/smartcode/assets`)"
-      service: smartcode
-    smartcode:
-      rule: "PathPrefix(`/smartcode`)"
-      service: smartcode
-      middlewares:
-        - smartcode-stripprefix
     api-exec:
       rule: "PathPrefix(`/api-exec`)"
       service: api-exec
@@ -35,31 +22,15 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:7862"
-    cronicle:
-      loadBalancer:
-        servers:
-          - url: "http://127.0.0.1:7863"
-    smartcode:
-      loadBalancer:
-        servers:
-          - url: "http://127.0.0.1:7864"
     api-exec:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:3000"
+          - url: "http://127.0.0.1:3001"
   middlewares:
     serve-stripprefix:
       stripPrefix:
         prefixes:
           - "/serve"
-    cronicle-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/cronicle"
-    smartcode-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/smartcode"
     api-exec-stripprefix:
       stripPrefix:
         prefixes:
