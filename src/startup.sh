@@ -105,8 +105,9 @@ log "api-exec 启动成功"
 cd "$ORIGINAL_DIR"
 
 log "启动 NocoDB..."
+log "使用说明请查看 https://github.com/aigem/hf-nocodb"
 exec /usr/src/appEntry/start.sh > /home/nocodb/static/nocodb.log 2>&1
 sleep 10
 log "NocoDB 启动成功"
 
-log "使用说明请查看 https://github.com/aigem/hf-nocodb"
+
