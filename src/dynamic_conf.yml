@@ -1,7 +1,7 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/cronicle`) && !PathPrefix(`/smartcode`)"
+      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/api-exec`) && !PathPrefix(`/smartcode`)"
       service: nocodb
     serve:
       rule: "PathPrefix(`/serve`)"
