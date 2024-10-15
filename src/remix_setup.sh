@@ -48,4 +48,10 @@ fi
 # 构建项目
 pnpm build
 
+# 检查构建是否成功
+if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
+    echo "Remix 构建失败，build 目录或 server/index.js 文件不存在"
+    exit 1
+fi
+
 echo "Remix 安装和初始化完成"

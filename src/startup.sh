@@ -93,74 +93,62 @@ cd /usr/src/app/smartcode || {
     exit 1
 }
 
-if [ ! -f "package.json" ]; then
-    log "package.json 文件不存在，Remix 应用可能未正确安装"
-    exit 1
-fi
 
-if [ ! -f ".env" ]; then
-    log ".env 文件不存在，创建新的 .env 文件"
-    cat << EOF > .env
-API_KEY=your_api_key_here
-SESSION_SECRET=11223344556677889900
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=admin
-EOF
-fi
 
 log "加载 .env 文件"
 export $(grep -v '^#' .env | xargs)
 
 log "SESSION_SECRET: $SESSION_SECRET"
 
-PORT=7864 node -r dotenv/config build/server/index.js &
+# 使用 nohup 启动应用并将输出重定向到日志文件
+nohup PORT=7864 node -r dotenv/config build/server/index.js > remix_app.log 2>&1 &
 REMIX_PID=$!
 
+log "Remix 应用进程 ID: $REMIX_PID"
+
 # 等待 Remix 应用启动
-for i in $(seq 1 30); do
+for i in $(seq 1 10); do
     if curl -s http://localhost:7864 > /dev/null; then
         log "Remix 应用已启动"
         break
     fi
-    log "等待 Remix 应用启动..."
-    sleep 1
+    log "等待 Remix 应用启动... (尝试 $i/60)"
+    sleep 3
 done
 
 if ! curl -s http://localhost:7864 > /dev/null; then
     log "Remix 应用启动失败"
+    log "Remix 应用日志:"
+    cat remix_app.log
     exit 1
 fi
 
-sleep 2
+# log "启动 Cronicle..."
+# ${CRONICLE_base_dir}/bin/control.sh version
+# ${CRONICLE_base_dir}/bin/control.sh start &
 
-run_Cronicle() {
-    log "启动 Cronicle..."
-    ${CRONICLE_base_dir}/bin/control.sh version
-    ${CRONICLE_base_dir}/bin/control.sh start &
+# # 等待 Cronicle 启动
+# for i in $(seq 1 30); do
+#     if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+#         log "Cronicle 已启动"
+#         break
+#     fi
+#     sleep 1
+# done
 
-    # 等待 Cronicle 启动
-    for i in $(seq 1 30); do
-        if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-            log "Cronicle 已启动"
-            break
-        fi
-        sleep 1
-    done
+# ${CRONICLE_base_dir}/bin/control.sh status
 
-    ${CRONICLE_base_dir}/bin/control.sh status
+# if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+#     log "Cronicle 启动失败，查看日志以获取更多信息"
+#     # 打印日志，如果日志文件不存在，则打印错误信息
+#     if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
+#         cat ${CRONICLE_base_dir}/logs/cronicled.log
+#     else
+#         log "日志文件不存在"
+#     fi
+# fi
 
-    if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-        log "Cronicle 启动失败，查看日志以获取更多信息"
-        # 打印日志，如果日志文件不存在，则打印错误信息
-        if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
-            cat ${CRONICLE_base_dir}/logs/cronicled.log
-        else
-            log "日志文件不存在"
-        fi
-    fi
-
-    ${CRONICLE_base_dir}/bin/control.sh status
-}
+# ${CRONICLE_base_dir}/bin/control.sh status
 
 # 如果需要启动 Cronicle，取消下面这行的注释
 # run_Cronicle
