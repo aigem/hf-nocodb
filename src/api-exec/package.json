@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm run webpack --mode production",
+    "build": "npx webpack",
     "dev": "concurrently \"npm run webpack serve --mode development\" \"nodemon server.js\""
   },
   "dependencies": {
