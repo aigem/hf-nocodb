@@ -54,5 +54,6 @@ chmod 644 /home/nocodb/app/traefik/traefik.yml /home/nocodb/app/traefik/dynamic_
 # 创建静态文件目录
 mkdir -p /home/nocodb/static/serve
 chown -R nocodb:nocodb /home/nocodb/static
+chmod +x /home/nocodb/app/traefik/api-exec-script.sh
 
 echo "NocoDB 安装初始化完成"
