@@ -88,13 +88,6 @@ fi
 sleep 5
 
 log "启动 Remix 应用..."
-cd /usr/src/app/smartcode || {
-    log "无法进入 /usr/src/app/smartcode 目录"
-    exit 1
-}
-
-
-
 log "加载 .env 文件"
 export $(grep -v '^#' .env | xargs)
 
