@@ -15,7 +15,7 @@ ENV WORKDIR=/usr/src/app \
     # CRONICLE_VER=0.9.60
 
 RUN apk add --no-cache git curl nodejs npm
-
+    
 ARG CACHEBUST=1
 
 RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \

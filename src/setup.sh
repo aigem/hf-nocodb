@@ -12,7 +12,7 @@ chown -R nocodb:nocodb /usr/app /usr/src/app /usr /run/postgresql /var/log/redis
 apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget curl tzdata
 
 # 安装 http-server
-npm install -g http-server pnpm pm2
+npm install -g http-server pm2
 
 # 设置密码
 echo "nocodb:nocodb_password" | chpasswd
