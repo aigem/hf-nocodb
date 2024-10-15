@@ -34,7 +34,7 @@ http:
     smartcode:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:7864"
+          - url: "http://127.0.0.1:3000"
   middlewares:
     serve-stripprefix:
       stripPrefix:
