@@ -15,7 +15,7 @@ cd /home/nocodb/app/api-exec || {
     echo "无法进入 /home/nocodb/app/api-exec 目录"
     exit 1
 }
-
+npm install -g pnpm
 echo "安装所有依赖，包括开发依赖"
 pnpm install
 
