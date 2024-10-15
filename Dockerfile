@@ -6,7 +6,6 @@ ENV WORKDIR=/usr/src/app \
     NC_DB="pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb" \
     NC_AUTH_JWT_SECRET=nocodb_jwt_secret \
     NC_TOOL_DIR=/usr/app/data/ \
-    NODE_ENV=production \
     PORT=7861 \
     NC_ALLOW_LOCAL_HOOKS=true \
     NC_REDIS_URL="redis://:redis_password@localhost:6379/4"
@@ -15,7 +14,7 @@ ENV WORKDIR=/usr/src/app \
     # CRONICLE_VER=0.9.60
 
 RUN apk add --no-cache git curl nodejs npm
-    
+
 ARG CACHEBUST=1
 
 RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \

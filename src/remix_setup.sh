@@ -12,12 +12,7 @@ git clone -b main https://github.com/aigem/smartcode.git /usr/src/app/smartcode
 # 设置目录权限
 chown -R ${USER}:${USER} /usr/src/app/smartcode
 
-cd /usr/src/app/smartcode
-
-# 使用 pnpm 安装依赖
-pnpm install
-
-# 构建项目
-pnpm build
+# 安装依赖并构建项目
+cd /usr/src/app/smartcode && pnpm install && pnpm build
 
 echo "Remix 安装和初始化完成"
