@@ -4,7 +4,7 @@ set -e
 echo "安装、配置 Remix 开始"
 
 # 全局安装 pnpm
-npm install -g pnpm pnpm-lock-only
+npm install -g pnpm
 
 # 克隆项目
 echo "克隆 Remix 项目到 /usr/src/app/smartcode"
