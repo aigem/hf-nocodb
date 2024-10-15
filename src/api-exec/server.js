@@ -84,6 +84,11 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: '服务器内部错误' });
 });
 
+// 为了确保 React 路由正常工作，添加以下路由
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // 启动服务器
 app.listen(port, () => {
   console.log(`服务器运行在 http://localhost:${port}/`);

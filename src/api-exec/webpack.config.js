@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public'),  // 将输出路径改为 'public'
     filename: 'bundle.[contenthash].js',
     clean: true,
   },
@@ -30,6 +30,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       favicon: './public/favicon.ico',
+      inject: true,  // 确保自动注入生成的 JS 文件
     }),
   ],
   devServer: {

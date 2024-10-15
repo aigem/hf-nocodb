@@ -9,6 +9,7 @@ cp -r /tmp/api-exec /home/nocodb/app/api-exec
 # 设置目录权限
 echo "设置目录权限"
 chown -R ${USER}:${USER} /home/nocodb/app/api-exec
+ chmod +x /home/nocodb/app/api-exec/scripts/*.sh
 
 echo "进入 /home/nocodb/app/api-exec 目录"
 cd /home/nocodb/app/api-exec || {
