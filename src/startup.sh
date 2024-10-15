@@ -88,6 +88,8 @@ fi
 sleep 5
 
 log "启动 Remix 应用..."
+cd /home/nocodb/app/smartcode
+pnpm build
 PORT=7864 node /home/nocodb/app/smartcode/build/server/index.js &
 REMIX_PID=$!
 
