@@ -14,7 +14,7 @@ ENV WORKDIR=/usr/src/app \
     # CRONICLE_base_dir=/opt/cronicle \
     # CRONICLE_VER=0.9.60
 
-RUN apk add --no-cache git curl nodejs npm pnpm pm2
+RUN apk add --no-cache git curl nodejs npm
 
 ARG CACHEBUST=1
 
