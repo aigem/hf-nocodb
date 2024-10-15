@@ -4,7 +4,7 @@ set -e
 echo "安装、配置 Remix 开始"
 
 # 全局安装 pnpm
-npm install -g pnpm
+npm install -g pnpm dotenv
 
 # 克隆项目
 echo "克隆 Remix 项目到 /usr/src/app/smartcode"
@@ -41,3 +41,5 @@ EOF
 pnpm build
 
 echo "Remix 安装和初始化完成"
+#查看目录
+ls -l /usr/src/app/smartcode
