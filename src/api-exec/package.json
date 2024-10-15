@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --mode production",
-    "dev": "concurrently \"webpack serve --mode development\" \"nodemon server.js\""
+    "build": "npm run webpack --mode production",
+    "dev": "concurrently \"npm run webpack serve --mode development\" \"nodemon server.js\""
   },
   "dependencies": {
     "express": "^4.17.1",
