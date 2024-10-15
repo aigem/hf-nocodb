@@ -85,35 +85,60 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
     log "Traefik 配置文件缺失"
     exit 1
 fi
+sleep 5
 
-sleep 10
+log "启动 Remix 应用..."
+PORT=7864 node /home/nocodb/app/smartcode/build/server/index.js &
+REMIX_PID=$!
 
-log "启动 Cronicle..."
-${CRONICLE_base_dir}/bin/control.sh version
-${CRONICLE_base_dir}/bin/control.sh start &
-
-# 等待 Cronicle 启动
-for i in $(seq 1 30); do
-    if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-        log "Cronicle 已启动"
+# 等待 Remix 应用启动
+for i in $(seq 1 10); do
+    if curl -s http://localhost:7864 > /dev/null; then
+        log "Remix 应用已启动"
         break
     fi
+    log "等待 Remix 应用启动..."
     sleep 1
 done
 
-${CRONICLE_base_dir}/bin/control.sh status
-
-if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-    log "Cronicle 启动失败，查看日志以获取更多信息"
-    # 打印日志，如果日志文件不存在，则打印错误信息
-    if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
-        cat ${CRONICLE_base_dir}/logs/cronicled.log
-    else
-        log "日志文件不存在"
-    fi
+if ! curl -s http://localhost:7864 > /dev/null; then
+    log "Remix 应用启动失败"
 fi
 
-${CRONICLE_base_dir}/bin/control.sh status
+sleep 2
+
+启动_Cronicle() {
+    log "启动 Cronicle..."
+    ${CRONICLE_base_dir}/bin/control.sh version
+    ${CRONICLE_base_dir}/bin/control.sh start &
+
+    # 等待 Cronicle 启动
+    for i in $(seq 1 30); do
+        if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+            log "Cronicle 已启动"
+            break
+        fi
+        sleep 1
+    done
+
+    ${CRONICLE_base_dir}/bin/control.sh status
+
+    if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
+        log "Cronicle 启动失败，查看日志以获取更多信息"
+        # 打印日志，如果日志文件不存在，则打印错误信息
+        if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
+            cat ${CRONICLE_base_dir}/logs/cronicled.log
+        else
+            log "日志文件不存在"
+        fi
+    fi
+
+    ${CRONICLE_base_dir}/bin/control.sh status
+}
+
+# 如果需要启动 Cronicle，取消下面这行的注释
+# 启动_Cronicle
 
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
+

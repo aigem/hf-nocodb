@@ -1,7 +1,7 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/cronicle`)"
+      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/cronicle`) && !PathPrefix(`/smartcode`)"
       service: nocodb
     serve:
       rule: "PathPrefix(`/serve`)"
@@ -13,6 +13,11 @@ http:
       service: cronicle
       middlewares:
         - cronicle-stripprefix
+    smartcode:
+      rule: "PathPrefix(`/smartcode`)"
+      service: smartcode
+      middlewares:
+        - smartcode-stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -26,6 +31,10 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:${CRONICLE_PORT}"
+    smartcode:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:7864"
   middlewares:
     serve-stripprefix:
       stripPrefix:
@@ -35,3 +44,7 @@ http:
       stripPrefix:
         prefixes:
           - "/cronicle"
+    smartcode-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/smartcode"

@@ -23,7 +23,11 @@ RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && chmod +x /usr/src/appEntry/startup.sh /tmp/setup.sh /tmp/Cronicle_setup.sh \
     && /tmp/setup.sh \
-    && /tmp/Cronicle_setup.sh \
+    # 安装 cronicle
+    # && /tmp/Cronicle_setup.sh \
+    # 安装 smartcode
+    && git clone -b main https://github.com/aigem/smartcode.git /usr/src/app/smartcode \
+    && ls -l /usr/src/app/smartcode \
     && rm -rf /tmp/hf-nocodb /tmp/setup.sh /tmp/Cronicle_setup.sh
 
 USER ${USER}
