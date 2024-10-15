@@ -17,7 +17,7 @@ cd /home/nocodb/app/api-exec || {
 }
 npm install -g pnpm
 echo "安装所有依赖，包括开发依赖"
-pnpm install
+NODE_ENV=development pnpm install
 
 # 构建项目
 echo "构建项目"
