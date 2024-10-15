@@ -19,15 +19,14 @@ RUN apk add --no-cache git curl nodejs npm
 ARG CACHEBUST=1
 
 RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
-    && cp /tmp/hf-nocodb/src/* /tmp/ \
-    && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
-    && chmod +x /usr/src/appEntry/startup.sh /tmp/setup.sh /tmp/Cronicle_setup.sh \
-    && /tmp/setup.sh \
+    && cp /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
+    && chmod +x /usr/src/appEntry/startup.sh \
+    && chmod +x /tmp/setup.sh && /tmp/setup.sh \
     # 安装 cronicle
-    # && /tmp/Cronicle_setup.sh \
+    # && chmod +x /tmp/Cronicle_setup.sh && /tmp/Cronicle_setup.sh \
     # 安装 smartcode
-    && /tmp/remix_setup.sh \
-    && rm -rf /tmp/hf-nocodb /tmp/setup.sh /tmp/Cronicle_setup.sh /tmp/remix_setup.sh
+    && chmod +x /tmp/remix_setup.sh && /tmp/remix_setup.sh \
+    && rm -rf /tmp/hf-nocodb /tmp/*.sh
 
 USER ${USER}
 
