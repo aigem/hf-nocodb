@@ -6,9 +6,6 @@ if [ -f /etc/profile.d/s3_env.sh ]; then
     . /etc/profile.d/s3_env.sh
 fi
 
-# 设置 NODE_ENV 为 development
-export NODE_ENV=development
-
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
