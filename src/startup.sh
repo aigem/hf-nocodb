@@ -98,8 +98,6 @@ if [ ! -f "package.json" ]; then
     exit 1
 fi
 
-pnpm install
-pnpm run build
 PORT=7864 node build/server/index.js &
 REMIX_PID=$!
 
@@ -110,7 +108,7 @@ for i in $(seq 1 30); do
         break
     fi
     log "等待 Remix 应用启动..."
-    sleep 2
+    sleep 1
 done
 
 if ! curl -s http://localhost:7864 > /dev/null; then

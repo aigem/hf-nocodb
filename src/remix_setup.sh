@@ -4,7 +4,7 @@ set -e
 echo "安装、配置 Remix 开始"
 
 # 全局安装 pnpm
-npm install -g pnpm
+npm install -g pnpm pnpm-lock-only
 
 # 克隆项目
 echo "克隆 Remix 项目到 /usr/src/app/smartcode"
@@ -13,9 +13,6 @@ if [ $? -ne 0 ]; then
     echo "克隆项目失败"
     exit 1
 fi
-
-echo "检查 /usr/src/app/smartcode 目录内容："
-ls -la /usr/src/app/smartcode
 
 # 设置目录权限
 echo "设置目录权限"
@@ -27,9 +24,20 @@ cd /usr/src/app/smartcode || {
     exit 1
 }
 
+
 echo "安装依赖"
+export NODE_ENV=development
 pnpm install
 
+echo "创建 .env 文件"
+cat << EOF > .env
+API_KEY=your_api_key_here
+SESSION_SECRET=11223344556677889900
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin
+EOF
+
+# 构建项目
+pnpm build
+
 echo "Remix 安装和初始化完成"
-echo "当前目录内容："
-ls -la
