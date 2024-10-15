@@ -99,9 +99,6 @@ log "SESSION_SECRET: $SESSION_SECRET"
 # 切换到 Remix 应用目录
 cd /usr/src/app/smartcode
 
-# 构建项目
-pnpm build
-
 # 检查构建是否成功
 if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
     echo "Remix 构建失败，build 目录或 server/index.js 文件不存在"
@@ -109,7 +106,7 @@ if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
 fi
 
 # 使用 pnpm start 启动应用，并指定端口
-nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
+PORT=7864 nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"

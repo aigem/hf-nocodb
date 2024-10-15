@@ -37,6 +37,9 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
 EOF
 
+# 构建项目
+pnpm build
+
 # 添加这个检查
 if [ -f .env ]; then
     echo ".env 文件已成功创建"
