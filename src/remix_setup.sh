@@ -38,7 +38,12 @@ ADMIN_PASSWORD=admin
 EOF
 
 # 构建项目
-pnpm build
+echo "构建项目"
+NODE_ENV=production pnpm run build
+
+# 确保 start 脚本正确设置
+echo "更新 package.json 的 start 脚本"
+sed -i 's/"start": ".*"/"start": "node build\/server\/index.js"/' package.json
 
 # 添加这个检查
 if [ -f .env ]; then

@@ -41,7 +41,6 @@ log "启动 Redis..."
 # 取消注释并修改 Redis 启动命令
 redis-server /etc/redis.conf --port 6379 --daemonize yes
 
-
 log "启动 http-server 服务..."
 mkdir -p /home/nocodb/static
 touch /home/nocodb/static/hi.txt
@@ -105,8 +104,8 @@ if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
     exit 1
 fi
 
-# 使用 pnpm start 启动应用，并指定端口
-PORT=7864 nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
+# 使用 NODE_ENV=production 来确保在生产模式下运行
+NODE_ENV=production PORT=7864 nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
