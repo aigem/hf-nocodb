@@ -14,7 +14,7 @@ log() {
 }
 
 log "启动 PostgreSQL..."
-pg_ctl -D /usr/app/data/pgdata -l /usr/app/data/pgdata/logfile start
+pg_ctl -D /usr/app/data/pgdata -l /home/nocodb/static/postgresql.log start
 
 # 等待 PostgreSQL 启动
 for i in $(seq 1 30); do
@@ -38,14 +38,13 @@ psql -U nocodb -d template1 -c "ALTER USER nocodb WITH PASSWORD 'nocodb_password
 log "可通过 pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb 连接到数据库"
 
 log "启动 Redis..."
-# 取消注释并修改 Redis 启动命令
-redis-server /etc/redis.conf --port 6379 --daemonize yes
+redis-server /etc/redis.conf --port 6379 --daemonize yes --logfile /home/nocodb/static/redis.log
 
 log "启动 http-server 服务..."
 mkdir -p /home/nocodb/static
 touch /home/nocodb/static/hi.txt
 echo "Hello from serve" > /home/nocodb/static/hi.txt
-http-server /home/nocodb -p 7862 --cors --log-ip true &
+http-server /home/nocodb -p 7862 --cors --log-ip true > /home/nocodb/static/http-server.log 2>&1 &
 HTTP_SERVER_PID=$!
 
 # 等待 http-server 启动
@@ -64,7 +63,7 @@ if ! curl -s http://localhost:7862 > /dev/null; then
 fi
 
 log "启动 Traefik..."
-traefik --configfile=/home/nocodb/app/traefik/traefik.yml &
+traefik --configfile=/home/nocodb/app/traefik/traefik.yml > /home/nocodb/static/traefik.log 2>&1 &
 TRAEFIK_PID=$!
 
 # 等待 Traefik 启动
@@ -105,7 +104,7 @@ if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
 fi
 
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production PORT=7864 pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
+NODE_ENV=production PORT=7864 pnpm run start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
@@ -144,4 +143,4 @@ cd "$ORIGINAL_DIR"
 # run_Cronicle
 
 log "启动 NocoDB..."
-exec /usr/src/appEntry/start.sh
+exec /usr/src/appEntry/start.sh > /home/nocodb/static/nocodb.log 2>&1

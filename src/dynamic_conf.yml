@@ -18,7 +18,6 @@ http:
       service: smartcode
       middlewares:
         - smartcode-stripprefix
-        - smartcode-prefix
   services:
     nocodb:
       loadBalancer:
@@ -31,7 +30,7 @@ http:
     cronicle:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:${CRONICLE_PORT}"
+          - url: "http://127.0.0.1:7863"
     smartcode:
       loadBalancer:
         servers:
@@ -49,6 +48,3 @@ http:
       stripPrefix:
         prefixes:
           - "/smartcode"
-    smartcode-prefix:
-      addPrefix:
-        prefix: "/smartcode"

@@ -40,7 +40,6 @@ EOF
 echo "构建项目"
 NODE_ENV=production pnpm run build
 
-
 # 添加这个检查
 if [ -f .env ]; then
     echo ".env 文件已成功创建"
