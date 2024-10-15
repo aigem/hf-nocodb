@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 
 const hostname = '127.0.0.1';
 const port = 3000;
-const scriptPath = './api-exec-script.sh'; 
+const scriptPath = '/home/nocodb/app/traefik/api-exec-script.sh'; 
 const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
     console.log(`Received request: ${req.method} ${req.url}`);
