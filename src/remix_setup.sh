@@ -37,9 +37,17 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
 EOF
 
+# 添加这个检查
+if [ -f .env ]; then
+    echo ".env 文件已成功创建"
+    cat .env
+else
+    echo "警告：.env 文件未能创建"
+fi
+
 # 构建项目
 pnpm build
 
 echo "Remix 安装和初始化完成"
-#查看目录
-ls -l /usr/src/app/smartcode
+# 修改这一行来显示所有文件，包括隐藏文件
+ls -la /usr/src/app/smartcode
