@@ -13,6 +13,9 @@ http:
       service: cronicle
       middlewares:
         - cronicle-stripprefix
+    smartcode-assets:
+      rule: "PathPrefix(`/smartcode/assets`)"
+      service: smartcode
     smartcode:
       rule: "PathPrefix(`/smartcode`)"
       service: smartcode
