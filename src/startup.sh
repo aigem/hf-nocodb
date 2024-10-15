@@ -6,6 +6,9 @@ if [ -f /etc/profile.d/s3_env.sh ]; then
     . /etc/profile.d/s3_env.sh
 fi
 
+# 设置 NODE_ENV 为 development
+export NODE_ENV=development
+
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
@@ -49,7 +52,7 @@ HTTP_SERVER_PID=$!
 # 等待 http-server 启动
 for i in $(seq 1 30); do
     if curl -s http://localhost:7862 > /dev/null; then
-        log "http-server 已启动"
+        log "http-server 启动"
         break
     fi
     log "等待 http-server 启动..."
@@ -88,23 +91,34 @@ fi
 sleep 5
 
 log "启动 Remix 应用..."
-cd /home/nocodb/app/smartcode
-pnpm build
-PORT=7864 node /home/nocodb/app/smartcode/build/server/index.js &
+cd /usr/src/app/smartcode || {
+    log "无法进入 /usr/src/app/smartcode 目录"
+    exit 1
+}
+
+if [ ! -f "package.json" ]; then
+    log "package.json 文件不存在，Remix 应用可能未正确安装"
+    exit 1
+fi
+
+pnpm install
+pnpm run build
+PORT=7864 node build/server/index.js &
 REMIX_PID=$!
 
 # 等待 Remix 应用启动
-for i in $(seq 1 10); do
+for i in $(seq 1 30); do
     if curl -s http://localhost:7864 > /dev/null; then
         log "Remix 应用已启动"
         break
     fi
     log "等待 Remix 应用启动..."
-    sleep 1
+    sleep 2
 done
 
 if ! curl -s http://localhost:7864 > /dev/null; then
     log "Remix 应用启动失败"
+    exit 1
 fi
 
 sleep 2
@@ -143,4 +157,3 @@ run_Cronicle() {
 
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh
-
