@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npx webpack",
-    "dev": "concurrently \"npm run webpack serve --mode development\" \"nodemon server.js\""
+    "build": "webpack --mode production",
+    "dev": "concurrently \"webpack serve --mode development\" \"nodemon server.js\""
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -29,8 +29,8 @@
     "postcss-loader": "^6.1.1",
     "autoprefixer": "^10.3.1",
     "tailwindcss": "^2.2.7",
-    "webpack": "^5.47.1",
-    "webpack-cli": "^4.7.2",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^3.11.2",
     "html-webpack-plugin": "^5.3.2",
     "concurrently": "^6.2.0",
