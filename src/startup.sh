@@ -92,8 +92,6 @@ log "启动 Remix 应用..."
 log "加载 .env 文件"
 export $(grep -v '^#' /usr/src/app/smartcode/.env | xargs)
 
-log "SESSION_SECRET: $SESSION_SECRET"
-
 # 切换到 Remix 应用目录
 cd /usr/src/app/smartcode
 
@@ -104,7 +102,7 @@ if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
 fi
 
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production PORT=7864 pnpm run start > /home/nocodb/static/remix_app.log 2>&1 &
+NODE_ENV=production PORT=7864 pnpm --prefix /usr/src/app/smartcode run start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
