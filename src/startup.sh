@@ -103,25 +103,9 @@ log "SESSION_SECRET: $SESSION_SECRET"
 # 使用 nohup 启动应用并将输出重定向到日志文件
 nohup PORT=7864 node -r dotenv/config build/server/index.js > remix_app.log 2>&1 &
 REMIX_PID=$!
-
+sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
 
-# 等待 Remix 应用启动
-for i in $(seq 1 10); do
-    if curl -s http://localhost:7864 > /dev/null; then
-        log "Remix 应用已启动"
-        break
-    fi
-    log "等待 Remix 应用启动... (尝试 $i/60)"
-    sleep 3
-done
-
-if ! curl -s http://localhost:7864 > /dev/null; then
-    log "Remix 应用启动失败"
-    log "Remix 应用日志:"
-    cat remix_app.log
-    exit 1
-fi
 
 # log "启动 Cronicle..."
 # ${CRONICLE_base_dir}/bin/control.sh version
