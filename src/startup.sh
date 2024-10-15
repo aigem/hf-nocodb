@@ -89,12 +89,12 @@ sleep 5
 
 log "启动 Remix 应用..."
 log "加载 .env 文件"
-export $(grep -v '^#' .env | xargs)
+export $(grep -v '^#' /usr/src/app/smartcode/.env | xargs)
 
 log "SESSION_SECRET: $SESSION_SECRET"
 
 # 使用 nohup 启动应用并将输出重定向到日志文件
-nohup PORT=7864 node -r dotenv/config build/server/index.js > remix_app.log 2>&1 &
+nohup PORT=7864 node -r dotenv/config /usr/src/app/smartcode/build/server/index.js > remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
