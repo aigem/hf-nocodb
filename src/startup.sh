@@ -6,6 +6,9 @@ if [ -f /etc/profile.d/s3_env.sh ]; then
     . /etc/profile.d/s3_env.sh
 fi
 
+# 保存当前工作目录
+ORIGINAL_DIR=$(pwd)
+
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
@@ -110,6 +113,9 @@ nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
+
+# 返回原来的工作目录
+cd "$ORIGINAL_DIR"
 
 # log "启动 Cronicle..."
 # ${CRONICLE_base_dir}/bin/control.sh version

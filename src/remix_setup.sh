@@ -28,7 +28,6 @@ cd /usr/src/app/smartcode || {
 echo "安装依赖"
 export NODE_ENV=development
 pnpm install
-pnpm add dotenv
 
 echo "创建 .env 文件"
 cat << EOF > .env
