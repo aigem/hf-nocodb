@@ -20,11 +20,9 @@ function executeScript(scriptPath) {
   return new Promise((resolve, reject) => {
     exec(`sh ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
-        reject({ error: '执行错误', message: error.message });
-      } else if (stderr) {
-        reject({ error: '标准错误输出', message: stderr });
+        reject({ error: '执行错误', message: error.message, stdout, stderr });
       } else {
-        resolve({ output: stdout.trim() });
+        resolve({ output: stdout.trim(), stderr: stderr.trim() });
       }
     });
   });
@@ -56,11 +54,20 @@ app.get('/api/execute', async (req, res) => {
   try {
     const result = await executeScript(scriptPath);
     res.json({
+      success: true,
+      scriptId: scriptNumber,
+      scriptPath,
       ...result,
       params: req.query
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      success: false,
+      scriptId: scriptNumber,
+      scriptPath,
+      ...error,
+      params: req.query
+    });
   }
 });
 
