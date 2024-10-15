@@ -93,12 +93,14 @@ export $(grep -v '^#' /usr/src/app/smartcode/.env | xargs)
 
 log "SESSION_SECRET: $SESSION_SECRET"
 
-# 使用 nohup 启动应用并将输出重定向到日志文件
-nohup PORT=7864 node -r dotenv/config /usr/src/app/smartcode/build/server/index.js > remix_app.log 2>&1 &
+# 切换到 Remix 应用目录
+cd /usr/src/app/smartcode
+
+# 使用 pnpm start 启动应用，并指定端口
+PORT=7864 nohup pnpm start > /home/nocodb/static/remix_app.log 2>&1 &
 REMIX_PID=$!
 sleep 5
 log "Remix 应用进程 ID: $REMIX_PID"
-
 
 # log "启动 Cronicle..."
 # ${CRONICLE_base_dir}/bin/control.sh version
