@@ -3,16 +3,16 @@ set -e
 
 echo "安装、配置 api-exec 开始"
 
-# 复制/tmp的api-exec文件夹及所有文件到/usr/src/app
-cp -r /tmp/api-exec /usr/src/app
+# 复制/tmp的api-exec文件夹及所有文件到/home/nocodb/app
+cp -r /tmp/api-exec /home/nocodb/app/api-exec
 
 # 设置目录权限
 echo "设置目录权限"
-chown -R ${USER}:${USER} /usr/src/app/api-exec
+chown -R ${USER}:${USER} /home/nocodb/app/api-exec
 
-echo "进入 /usr/src/app/api-exec 目录"
-cd /usr/src/app/api-exec || {
-    echo "无法进入 /usr/src/app/api-exec 目录"
+echo "进入 /home/nocodb/app/api-exec 目录"
+cd /home/nocodb/app/api-exec || {
+    echo "无法进入 /home/nocodb/app/api-exec 目录"
     exit 1
 }
 

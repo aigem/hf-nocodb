@@ -22,7 +22,7 @@ for i in $(seq 1 30); do
         break
     fi
     log "等待 PostgreSQL 启动..."
-    sleep 2
+    sleep 1
 done
 
 if ! pg_isready -U nocodb; then
@@ -36,14 +36,13 @@ psql -U nocodb -d template1 -c "SELECT 1 FROM pg_database WHERE datname = 'nocod
 psql -U nocodb -d template1 -c "ALTER USER nocodb WITH PASSWORD 'nocodb_password';"
 
 log "可通过 pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb 连接到数据库"
+log "PostgreSQL 启动成功"
 
 log "启动 Redis..."
 redis-server /etc/redis.conf --port 6379 --daemonize yes --logfile /home/nocodb/static/redis.log
+log "Redis 启动成功"
 
 log "启动 http-server 服务..."
-mkdir -p /home/nocodb/static
-touch /home/nocodb/static/hi.txt
-echo "Hello from serve" > /home/nocodb/static/hi.txt
 http-server /home/nocodb -p 7862 --cors --log-ip true > /home/nocodb/static/http-server.log 2>&1 &
 HTTP_SERVER_PID=$!
 
@@ -87,64 +86,26 @@ if [ ! -f "/home/nocodb/app/traefik/traefik.yml" ] || [ ! -f "/home/nocodb/app/t
     exit 1
 fi
 sleep 5
+log "Traefik 启动成功"
 
-log "启动 API 执行脚本..."
-node /home/nocodb/app/traefik/api-exec.js > /home/nocodb/static/api-exec.log 2>&1 &
-API_EXEC_PID=$!
-sleep 1
-log "API 执行进程 ID: $API_EXEC_PID"
-
-log "启动 Remix 应用..."
-log "加载 .env 文件"
-export $(grep -v '^#' /usr/src/app/smartcode/.env | xargs)
+log "启动 api-exec..."
 
 # 切换到 Remix 应用目录
-cd /usr/src/app/smartcode
-
-# 检查构建是否成功
-if [ ! -d "build" ] || [ ! -f "build/server/index.js" ]; then
-    echo "Remix 构建失败，build 目录或 server/index.js 文件不存在"
-    exit 1
-fi
+cd /home/nocodb/app/api-exec
 
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production PORT=7864 pnpm --prefix /usr/src/app/smartcode run start > /home/nocodb/static/remix_app.log 2>&1 &
-REMIX_PID=$!
-sleep 5
-log "Remix 应用进程 ID: $REMIX_PID"
+NODE_ENV=production npm --prefix /usr/src/app/api-exec run start > /home/nocodb/static/api-exec.log 2>&1 &
+API_EXEC_PID=$!
+sleep 2
+log "api-exec 进程 ID: $API_EXEC_PID"
+log "api-exec 启动成功"
 
 # 返回原来的工作目录
 cd "$ORIGINAL_DIR"
 
-# log "启动 Cronicle..."
-# ${CRONICLE_base_dir}/bin/control.sh version
-# ${CRONICLE_base_dir}/bin/control.sh start &
-
-# # 等待 Cronicle 启动
-# for i in $(seq 1 30); do
-#     if curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-#         log "Cronicle 已启动"
-#         break
-#     fi
-#     sleep 1
-# done
-
-# ${CRONICLE_base_dir}/bin/control.sh status
-
-# if ! curl -s http://localhost:${CRONICLE_PORT} > /dev/null; then
-#     log "Cronicle 启动失败，查看日志以获取更多信息"
-#     # 打印日志，如果日志文件不存在，则打印错误信息
-#     if [ -f "${CRONICLE_base_dir}/logs/cronicled.log" ]; then
-#         cat ${CRONICLE_base_dir}/logs/cronicled.log
-#     else
-#         log "日志文件不存在"
-#     fi
-# fi
-
-# ${CRONICLE_base_dir}/bin/control.sh status
-
-# 如果需要启动 Cronicle，取消下面这行的注释
-# run_Cronicle
-
 log "启动 NocoDB..."
 exec /usr/src/appEntry/start.sh > /home/nocodb/static/nocodb.log 2>&1
+sleep 10
+log "NocoDB 启动成功"
+
+log "使用说明请查看 https://github.com/aigem/hf-nocodb"

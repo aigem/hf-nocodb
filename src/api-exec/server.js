@@ -11,8 +11,8 @@ const port = process.env.API_EXEC_PORT || 3001;
 
 // 脚本路径配置
 const scripts = {
-  '1': '/home/nocodb/app/traefik/scripts/1.sh',
-  '2': '/home/nocodb/app/traefik/scripts/2.sh'
+  '1': '/home/nocodb/app/api-exec/scripts/1.sh',
+  '2': '/home/nocodb/app/api-exec/scripts/2.sh'
 };
 
 // 执行脚本的函数

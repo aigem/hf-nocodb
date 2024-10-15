@@ -20,8 +20,6 @@ RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && chmod +x /usr/src/appEntry/startup.sh \
     # 安装 setup.sh
     && chmod +x /tmp/setup.sh && /tmp/setup.sh \
-    # 安装 smartcode
-    && chmod +x /tmp/remix_setup.sh && /tmp/remix_setup.sh \
     # 安装 api-exec
     && chmod +x /tmp/apiexec_setup.sh && /tmp/apiexec_setup.sh \
     && rm -rf /tmp/hf-nocodb /tmp/*.sh
