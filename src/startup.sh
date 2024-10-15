@@ -1,11 +1,6 @@
 #!/bin/sh
 set -e
 
-# 加载环境变量
-if [ -f /etc/profile.d/s3_env.sh ]; then
-    . /etc/profile.d/s3_env.sh
-fi
-
 # 保存当前工作目录
 ORIGINAL_DIR=$(pwd)
 
@@ -90,11 +85,17 @@ log "Traefik 启动成功"
 
 log "启动 api-exec..."
 
-# 切换到 Remix 应用目录
+# 切换到 api-exec 应用目录
 cd /home/nocodb/app/api-exec
 
+# 检查 package.json 是否存在
+if [ ! -f "package.json" ]; then
+    log "错误：api-exec 目录中找不到 package.json 文件"
+    exit 1
+fi
+
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production npm --prefix /usr/src/app/api-exec run start > /home/nocodb/static/api-exec.log 2>&1 &
+NODE_ENV=production pnpm start > /home/nocodb/static/api-exec.log 2>&1 &
 API_EXEC_PID=$!
 sleep 2
 log "api-exec 进程 ID: $API_EXEC_PID"
