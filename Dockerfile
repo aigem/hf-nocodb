@@ -5,6 +5,7 @@ ARG CACHEBUST=22
 # 设置环境变量
 ENV WORKDIR=/usr/src/app \
     USER=nocodb \
+    HOME_DIR=/home/nocodb \
     NC_DB="pg://localhost:5432?u=nocodb&p=nocodb_password&d=nocodb" \
     NC_AUTH_JWT_SECRET=nocodb_jwt_secret \
     NC_TOOL_DIR=/usr/app/data/ \

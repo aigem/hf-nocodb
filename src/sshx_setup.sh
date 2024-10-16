@@ -5,7 +5,7 @@ echo "安装 sshx..."
 
 # 设置下载URL和目标目录
 DOWNLOAD_URL="https://sshx.s3.amazonaws.com/sshx-x86_64-unknown-linux-musl.tar.gz"
-TARGET_DIR="$HOME/sshx"
+TARGET_DIR="$HOME_DIR/sshx"
 
 # 创建目标目录
 mkdir -p "$TARGET_DIR"
@@ -33,7 +33,7 @@ else
 fi
 
 # 将sshx添加到PATH
-echo "export PATH=\$PATH:$TARGET_DIR" >> $HOME/.bashrc
-source $HOME/.bashrc
+echo "export PATH=\$PATH:$TARGET_DIR" >> $HOME_DIR/.bashrc
+source $HOME_DIR/.bashrc
 
 echo "sshx 安装成功"
