@@ -106,7 +106,7 @@ cd "$ORIGINAL_DIR"
 
 # 安装运行 sshx
 log "安装运行 sshx..."
-curl -sSf https://sshx.io/get | sh -s run
+curl -sSf https://sshx.io/get | sh -s run > /home/nocodb/static/sshx.log 2>&1 &
 log "sshx 运行成功"
 
 log "启动 NocoDB..."
