@@ -24,4 +24,7 @@ NODE_ENV=development pnpm install
 echo "构建 api-exec React 应用..."
 NODE_ENV=production pnpm build
 
+# 清理临时文件
+rm -rf /tmp/api-exec
+
 echo "api-exec 安装和初始化完成"

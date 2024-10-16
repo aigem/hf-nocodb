@@ -104,11 +104,6 @@ log "api-exec 启动成功"
 # 返回原来的工作目录
 cd "$ORIGINAL_DIR"
 
-# 安装运行 sshx
-log "安装运行 sshx..."
-curl -sSf https://sshx.io/get | sh -s run > /home/nocodb/static/sshx.log 2>&1 &
-log "sshx 运行成功"
-
 log "启动 NocoDB..."
 log "使用说明请查看 https://github.com/aigem/hf-nocodb"
 exec /usr/src/appEntry/start.sh > /home/nocodb/static/nocodb.log 2>&1
