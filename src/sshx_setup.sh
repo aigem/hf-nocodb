@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-log "安装 sshx..."
+echo "安装 sshx..."
 
 # 设置下载URL和目标目录
 DOWNLOAD_URL="https://sshx.s3.amazonaws.com/sshx-x86_64-unknown-linux-musl.tar.gz"
@@ -36,4 +36,4 @@ fi
 echo "export PATH=\$PATH:$TARGET_DIR" >> $HOME/.bashrc
 source $HOME/.bashrc
 
-log "sshx 安装成功"
+echo "sshx 安装成功"

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-log "开始安装 rclone..."
+echo "开始安装 rclone..."
 
 # 设置下载URL和目标目录
 DOWNLOAD_URL="https://downloads.rclone.org/rclone-current-linux-amd64.zip"
@@ -51,5 +51,5 @@ else
     exit 1
 fi
 
-log "rclone 安装成功"
+echo "rclone 安装成功"
 
