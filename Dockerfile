@@ -24,6 +24,8 @@ RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && chmod +x /tmp/apiexec_setup.sh && /tmp/apiexec_setup.sh \
     # 安装 sshx
     && chmod +x /tmp/sshx_setup.sh && /tmp/sshx_setup.sh \
+    # 安装 rclone
+    && chmod +x /tmp/rclone_setup.sh && /tmp/rclone_setup.sh \
     && rm -rf /tmp/hf-nocodb /tmp/*.sh
 
 USER ${USER}
