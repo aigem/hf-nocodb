@@ -8,8 +8,8 @@ DOWNLOAD_URL="https://downloads.rclone.org/rclone-current-linux-amd64.zip"
 TARGET_DIR="$HOME_DIR/rclone"
 
 # 创建目标目录
-mkdir -p "$TARGET_DIR"
-chown $USER:$USER "$TARGET_DIR"
+mkdir -p "$TARGET_DIR" /home/nocodb/.config/rclone/
+chown $USER:$USER "$TARGET_DIR" /home/nocodb/.config/rclone/
 
 # 下载rclone
 echo "下载 rclone..."
