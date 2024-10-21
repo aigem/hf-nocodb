@@ -51,7 +51,7 @@ if [ -f "$TARGET_DIR/rclone" ]; then
 # rclone 配置文件
 # S3 兼容存储配置
 
-[s3]
+[r2s3]
 type = s3
 provider = Cloudflare
 access_key_id = ${NC_S3_ACCESS_KEY}
