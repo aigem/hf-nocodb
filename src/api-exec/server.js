@@ -16,7 +16,9 @@ const scripts = {
   '1': path.join(config.scriptsDir, '1.sh'),
   '2': path.join(config.scriptsDir, '2.sh'),
   '3': path.join(config.scriptsDir, '3.sh'),
-  '4': path.join(config.scriptsDir, '4.sh')
+  '4': path.join(config.scriptsDir, '4.sh'),
+  'backup_sql': path.join(config.scriptsDir, 'backup_sql_to_local.sh'),
+  'send_to_s3': path.join(config.scriptsDir, 'sent_buckupfile_to_s3.sh')
 };
 
 // 添加日志函数
