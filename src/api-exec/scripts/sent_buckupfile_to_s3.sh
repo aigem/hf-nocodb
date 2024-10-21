@@ -3,6 +3,7 @@
 # 输出当前用户和工作目录
 echo "当前用户: $(whoami)"
 echo "当前工作目录: $(pwd)"
+echo "rclone config file: $HOME/.config/rclone/rclone.conf"
 
 # 尝试加载环境变量，如果文件不存在则输出警告
 if [ -f $HOME/.s3_env ]; then
@@ -78,8 +79,10 @@ echo "rclone配置文件内容:"
 cat "$TEMP_RCLONE_CONFIG"
 
 # 使用rclone上传文件到S3兼容的存储服务
+echo "尝试列出存储桶内容..."
+$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" ls "s3:$NC_S3_BUCKET_NAME"
 echo "开始上传备份文件到S3兼容的存储服务..."
-$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/"
+$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/" -vv --no-check-bucket
 
 # 检查上传是否成功
 if [ $? -eq 0 ]; then
