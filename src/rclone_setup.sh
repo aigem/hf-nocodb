@@ -17,8 +17,8 @@ DOWNLOAD_URL="https://downloads.rclone.org/rclone-current-linux-amd64.zip"
 TARGET_DIR="$HOME_DIR/rclone"
 
 # 创建目标目录
-mkdir -p "$TARGET_DIR" /home/nocodb/.config/rclone/
-chown $USER:$USER "$TARGET_DIR" /home/nocodb/.config/rclone/
+mkdir -p "$TARGET_DIR" "$HOME_DIR/.config/rclone/"
+chown $USER:$USER "$TARGET_DIR" "$HOME_DIR/.config/rclone/"
 
 # 下载rclone
 echo "下载 rclone..."
@@ -42,16 +42,6 @@ if [ -f "$TARGET_DIR/rclone" ]; then
     echo "rclone 已成功下载并安装到 $TARGET_DIR"
     echo "rclone 版本: $($TARGET_DIR/rclone --version | head -n 1)"
 
-    # 将rclone添加到PATH
-    echo "export PATH=\$PATH:$TARGET_DIR" >> $HOME_DIR/.bashrc
-    source $HOME_DIR/.bashrc
-
-    # 添加调试输出
-    echo "Debug: NC_S3_ACCESS_KEY = ${NC_S3_ACCESS_KEY}"
-    echo "Debug: NC_S3_ACCESS_SECRET = ${NC_S3_ACCESS_SECRET}"
-    echo "Debug: NC_S3_ENDPOINT = ${NC_S3_ENDPOINT}"
-    echo "Debug: NC_S3_REGION = ${NC_S3_REGION}"
-
     # 创建基本配置文件
     cat > $HOME_DIR/.config/rclone/rclone.conf <<EOL
 # rclone 配置文件
@@ -59,15 +49,17 @@ if [ -f "$TARGET_DIR/rclone" ]; then
 
 [r2s3]
 type = s3
-provider = Cloudflare
+provider = AWS
 access_key_id = ${NC_S3_ACCESS_KEY}
 secret_access_key = ${NC_S3_ACCESS_SECRET}
 endpoint = ${NC_S3_ENDPOINT}
 region = ${NC_S3_REGION}
+acl = private
+s3_force_path_style = true
+s3_verify_ssl = false
 EOL
 
     echo "已创建 rclone 配置文件: $HOME_DIR/.config/rclone/rclone.conf"
-    cat $HOME_DIR/.config/rclone/rclone.conf
 else
     echo "rclone 安装失败。请检查下载URL并重试。"
     exit 1

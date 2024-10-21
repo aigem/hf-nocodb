@@ -2,7 +2,7 @@
 
 # 设置rclone路径
 RCLONE_PATH="$HOME/rclone/rclone"
-echo "RCLONE_PATH: $RCLONE_PATH"
+BACKUP_DIR="/home/nocodb/backups"
 
 # 检查rclone是否存在
 if [ -f "$RCLONE_PATH" ]; then
@@ -29,16 +29,8 @@ fi
 
 # 使用rclone上传文件到S3兼容的存储服务
 echo "尝试列出存储桶内容..."
-$RCLONE_PATH ls "r2s3:$NC_S3_BUCKET_NAME"
+$RCLONE_PATH ls r2s3:noco-db
 echo "开始上传备份文件到S3兼容的存储服务..."
-$RCLONE_PATH copy "$BACKUP_FILE" "r2s3:$NC_S3_BUCKET_NAME/nocodb-backups/" -vv
-
-# 检查上传是否成功
-if [ $? -eq 0 ]; then
-    echo "备份文件已成功上传到S3兼容的存储服务: r2s3:$NC_S3_BUCKET_NAME/nocodb-backups/$(basename $BACKUP_FILE)"
-else
-    echo "备份文件上传失败，请检查rclone配置和S3兼容存储服务的权限"
-    exit 1
-fi
+$RCLONE_PATH copy "$BACKUP_DIR" r2s3:noco-db/nocodb-backups/ -vv
 
 echo "备份过程完成"
