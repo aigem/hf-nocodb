@@ -28,17 +28,23 @@ if [ -z "$NC_S3_ACCESS_KEY" ] || [ -z "$NC_S3_ACCESS_SECRET" ] || [ -z "$NC_S3_E
     exit 1
 fi
 
+# 创建临时rclone配置文件
+TEMP_RCLONE_CONFIG=$(mktemp)
+
 # 配置rclone
-$RCLONE_PATH config create s3 s3 \
-    provider=Cloudflare \
-    access_key_id=$NC_S3_ACCESS_KEY \
-    secret_access_key=$NC_S3_ACCESS_SECRET \
-    endpoint=$NC_S3_ENDPOINT \
-    region=$NC_S3_REGION
+cat > "$TEMP_RCLONE_CONFIG" <<EOL
+[s3]
+type = s3
+provider = Cloudflare
+access_key_id = $NC_S3_ACCESS_KEY
+secret_access_key = $NC_S3_ACCESS_SECRET
+endpoint = $NC_S3_ENDPOINT
+region = $NC_S3_REGION
+EOL
 
 # 使用rclone上传文件到S3兼容的存储服务
 echo "开始上传备份文件到S3兼容的存储服务..."
-$RCLONE_PATH copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/"
+$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/"
 
 # 检查上传是否成功
 if [ $? -eq 0 ]; then
@@ -47,5 +53,8 @@ else
     echo "备份文件上传失败，请检查rclone配置和S3兼容存储服务的权限"
     exit 1
 fi
+
+# 删除临时配置文件
+rm "$TEMP_RCLONE_CONFIG"
 
 echo "备份过程完成"
