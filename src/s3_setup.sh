@@ -7,4 +7,5 @@ echo "export NC_S3_ACCESS_KEY=8cebf2d01e174f6d7194ce3cb4640899" >> $HOME_DIR/.s3
 echo "export NC_S3_ACCESS_SECRET=$(cat /run/secrets/NC_S3_ACCESS_SECRET)" >> $HOME_DIR/.s3_env
 echo "export NC_S3_ENDPOINT=https://6fc319456edcff6ad2c7fd9a3b55cb92.r2.cloudflarestorage.com" >> $HOME_DIR/.s3_env
 echo "export NC_S3_REGION=auto" >> $HOME_DIR/.s3_env
-chmod +x $HOME_DIR/.s3_env
+
+chmod 644 $HOME_DIR/.s3_env

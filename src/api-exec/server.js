@@ -11,14 +11,14 @@ const config = require('./config');
 const app = express();
 const port = config.port;
 
-// 修改脚本路径配置
-const scripts = {
-  '1': path.join(config.scriptsDir, '1.sh'),
-  '2': path.join(config.scriptsDir, '2.sh'),
-  '3': path.join(config.scriptsDir, '3.sh'),
-  '4': path.join(config.scriptsDir, '4.sh'),
-  'backup_sql': path.join(config.scriptsDir, 'backup_sql_to_local.sh'),
-  'send_to_s3': path.join(config.scriptsDir, 'sent_buckupfile_to_s3.sh')
+// 定义允许执行的脚本列表
+const allowedScripts = {
+  '1': '1.sh',
+  '2': '2.sh',
+  '3': '3.sh',
+  '4': '4.sh',
+  'backup_sql': 'backup_sql_to_local.sh',
+  'send_to_s3': 'sent_backupfile_to_s3.sh'
 };
 
 // 添加日志函数
@@ -29,7 +29,16 @@ function log(message) {
   console.log(logMessage);
 }
 
-// 在 app.use 之前添加错误处理中间件
+// 应用中间件
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 100 // 每个 IP 15 分钟内最多 100 个请求
+});
+app.use(limiter);
+
+// 错误处理中间件
 app.use((err, req, res, next) => {
   log(`错误: ${err.message}`);
   res.status(500).json({ error: '服务器内部错误' });
@@ -53,11 +62,13 @@ function executeScript(scriptPath) {
 // API 路由
 app.get('/execute', async (req, res) => {
   const scriptNumber = req.query.script;
-  const scriptPath = scripts[scriptNumber];
+  const scriptName = allowedScripts[scriptNumber];
 
-  if (!scriptPath) {
+  if (!scriptName) {
     return res.status(400).json({ error: '无效的脚本参数' });
   }
+
+  const scriptPath = path.join(config.scriptsDir, scriptName);
 
   try {
     const result = await executeScript(scriptPath);
@@ -77,27 +88,19 @@ app.get('/execute', async (req, res) => {
 
 // 获取可用脚本列表
 app.get('/scripts', (req, res) => {
-  const scriptList = Object.keys(scripts).map(id => ({
+  const scriptList = Object.keys(allowedScripts).map(id => ({
     id,
     name: `脚本 ${id}`
   }));
   res.json(scriptList);
 });
 
+// 健康检查
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 // 启动服务器
 app.listen(port, () => {
   console.log(`服务器运行在 http://localhost:${port}/`);
-});
-
-app.use(helmet());
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 分钟
-  max: 100 // 限制每个 IP 15 分钟内最多 100 个请求
-});
-
-app.use(limiter);
-
-app.get('/', (req, res) => {
-  res.status(200).json({ status: 'OK' });
 });
