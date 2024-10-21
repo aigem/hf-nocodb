@@ -3,6 +3,15 @@ set -e
 
 echo "开始安装 rclone..."
 
+# 尝试加载环境变量，如果文件不存在则输出警告
+if [ -f $HOME/.s3_env ]; then
+    echo "正在加载 $HOME/.s3_env"
+    source $HOME/.s3_env
+else
+    echo "警告: $HOME/.s3_env 文件不存在，将使用默认值或环境变量"
+fi
+
+
 # 设置下载URL和目标目录
 DOWNLOAD_URL="https://downloads.rclone.org/rclone-current-linux-amd64.zip"
 TARGET_DIR="$HOME_DIR/rclone"
@@ -38,25 +47,21 @@ if [ -f "$TARGET_DIR/rclone" ]; then
     source $HOME_DIR/.bashrc
 
     # 创建基本配置文件
-    mkdir -p $HOME_DIR/.config/rclone
     cat > $HOME_DIR/.config/rclone/rclone.conf <<EOL
 # rclone 配置文件
-# 在这里添加您的远程存储配置
-EOL
+# S3 兼容存储配置
 
-    echo "已创建基本配置文件: $HOME_DIR/.config/rclone/rclone.conf"
-    echo "请使用 'rclone config' 命令来配置您的远程存储"
-
-    # 在文件末尾添加
-    cat >> $HOME_DIR/.config/rclone/rclone.conf <<EOL
 [s3]
 type = s3
 provider = Cloudflare
 access_key_id = ${NC_S3_ACCESS_KEY}
 secret_access_key = ${NC_S3_ACCESS_SECRET}
-endpoint = https://<accountid>.r2.cloudflarestorage.com
-acl = private
+endpoint = ${NC_S3_ENDPOINT}
+region = ${NC_S3_REGION}
 EOL
+
+    echo "已创建 rclone 配置文件: $HOME_DIR/.config/rclone/rclone.conf"
+    cat $HOME_DIR/.config/rclone/rclone.conf
 else
     echo "rclone 安装失败。请检查下载URL并重试。"
     exit 1
