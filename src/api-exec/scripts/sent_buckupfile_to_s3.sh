@@ -46,18 +46,16 @@ if [ ! -f "$BACKUP_FILE" ]; then
 fi
 
 # 详细检查每个必要的环境变量
-missing_vars=()
-[ -z "$NC_S3_ACCESS_KEY" ] && missing_vars+=("NC_S3_ACCESS_KEY")
-[ -z "$NC_S3_ACCESS_SECRET" ] && missing_vars+=("NC_S3_ACCESS_SECRET")
-[ -z "$NC_S3_ENDPOINT" ] && missing_vars+=("NC_S3_ENDPOINT")
-[ -z "$NC_S3_REGION" ] && missing_vars+=("NC_S3_REGION")
-[ -z "$NC_S3_BUCKET_NAME" ] && missing_vars+=("NC_S3_BUCKET_NAME")
+missing_vars=""
+[ -z "$NC_S3_ACCESS_KEY" ] && missing_vars="$missing_vars NC_S3_ACCESS_KEY"
+[ -z "$NC_S3_ACCESS_SECRET" ] && missing_vars="$missing_vars NC_S3_ACCESS_SECRET"
+[ -z "$NC_S3_ENDPOINT" ] && missing_vars="$missing_vars NC_S3_ENDPOINT"
+[ -z "$NC_S3_REGION" ] && missing_vars="$missing_vars NC_S3_REGION"
+[ -z "$NC_S3_BUCKET_NAME" ] && missing_vars="$missing_vars NC_S3_BUCKET_NAME"
 
-if [ ${#missing_vars[@]} -ne 0 ]; then
+if [ -n "$missing_vars" ]; then
     echo "错误: 以下必要的S3环境变量缺失或为空:"
-    for var in "${missing_vars[@]}"; do
-        echo "- $var"
-    done
+    echo "$missing_vars"
     exit 1
 fi
 
