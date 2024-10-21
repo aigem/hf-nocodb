@@ -12,3 +12,5 @@ echo "export LITESTREAM_S3_SECRET_ACCESS_KEY=$(cat /run/secrets/NC_S3_ACCESS_SEC
 chmod +x $HOME_DIR/.s3_env
 
 echo "S3 环境密钥变量设置完成"
+echo "文件内容:"
+cat $HOME_DIR/.s3_env

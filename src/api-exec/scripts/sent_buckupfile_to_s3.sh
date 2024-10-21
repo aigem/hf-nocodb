@@ -1,14 +1,35 @@
 #!/bin/bash
 
+# 输出当前用户和工作目录
+echo "当前用户: $(whoami)"
+echo "当前工作目录: $(pwd)"
+
 # 尝试加载环境变量，如果文件不存在则输出警告
 if [ -f $HOME/.s3_env ]; then
+    echo "正在加载 $HOME/.s3_env"
     source $HOME/.s3_env
 else
     echo "警告: $HOME/.s3_env 文件不存在，将使用默认值或环境变量"
 fi
 
+# 输出环境变量值（注意：不要在生产环境中显示敏感信息）
+echo "NC_S3_ACCESS_KEY: ${NC_S3_ACCESS_KEY:0:5}..."
+echo "NC_S3_ACCESS_SECRET: ${NC_S3_ACCESS_SECRET:0:5}..."
+echo "NC_S3_ENDPOINT: $NC_S3_ENDPOINT"
+echo "NC_S3_REGION: $NC_S3_REGION"
+echo "NC_S3_BUCKET_NAME: $NC_S3_BUCKET_NAME"
+
 # 设置rclone路径
 RCLONE_PATH="$HOME/rclone/rclone"
+echo "RCLONE_PATH: $RCLONE_PATH"
+
+# 检查rclone是否存在
+if [ -f "$RCLONE_PATH" ]; then
+    echo "rclone 已找到"
+else
+    echo "错误: rclone 未找到"
+    exit 1
+fi
 
 # 检查备份文件是否存在
 if [ -z "$BACKUP_FILE" ]; then
@@ -16,6 +37,8 @@ if [ -z "$BACKUP_FILE" ]; then
     BACKUP_DIR="/home/nocodb/backups"
     BACKUP_FILE="$BACKUP_DIR/nocodb_backup_dump.sql"
 fi
+
+echo "BACKUP_FILE: $BACKUP_FILE"
 
 if [ ! -f "$BACKUP_FILE" ]; then
     echo "备份文件不存在: $BACKUP_FILE"
@@ -30,6 +53,7 @@ fi
 
 # 创建临时rclone配置文件
 TEMP_RCLONE_CONFIG=$(mktemp)
+echo "临时rclone配置文件: $TEMP_RCLONE_CONFIG"
 
 # 配置rclone
 cat > "$TEMP_RCLONE_CONFIG" <<EOL
@@ -41,6 +65,9 @@ secret_access_key = $NC_S3_ACCESS_SECRET
 endpoint = $NC_S3_ENDPOINT
 region = $NC_S3_REGION
 EOL
+
+echo "rclone配置文件内容:"
+cat "$TEMP_RCLONE_CONFIG"
 
 # 使用rclone上传文件到S3兼容的存储服务
 echo "开始上传备份文件到S3兼容的存储服务..."

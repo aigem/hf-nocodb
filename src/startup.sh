@@ -3,7 +3,16 @@ set -e
 
 # 加载 S3 环境变量
 if [ -f $HOME/.s3_env ]; then
+    echo "加载 $HOME/.s3_env"
     source $HOME/.s3_env
+    # 输出环境变量（注意：不要在生产环境中显示敏感信息）
+    echo "NC_S3_ACCESS_KEY: ${NC_S3_ACCESS_KEY:0:5}..."
+    echo "NC_S3_ACCESS_SECRET: ${NC_S3_ACCESS_SECRET:0:5}..."
+    echo "NC_S3_ENDPOINT: $NC_S3_ENDPOINT"
+    echo "NC_S3_REGION: $NC_S3_REGION"
+    echo "NC_S3_BUCKET_NAME: $NC_S3_BUCKET_NAME"
+else
+    echo "警告: $HOME/.s3_env 文件不存在"
 fi
 
 # 保存当前工作目录
