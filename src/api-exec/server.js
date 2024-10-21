@@ -3,44 +3,50 @@
 const express = require('express');
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const helmet = require('helmet');
-require('dotenv').config();
+const rateLimit = require('express-rate-limit');
+const config = require('./config');
 
 const app = express();
-const port = process.env.API_EXEC_PORT || 3001;
+const port = config.port;
 
-// 脚本路径配置
+// 修改脚本路径配置
 const scripts = {
-  '1': '/home/nocodb/app/api-exec/scripts/1.sh',
-  '2': '/home/nocodb/app/api-exec/scripts/2.sh'
+  '1': path.join(config.scriptsDir, '1.sh'),
+  '2': path.join(config.scriptsDir, '2.sh'),
+  '3': path.join(config.scriptsDir, '3.sh'),
+  '4': path.join(config.scriptsDir, '4.sh')
 };
+
+// 添加日志函数
+function log(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  fs.appendFileSync(path.join(__dirname, 'api-exec.log'), logMessage);
+  console.log(logMessage);
+}
+
+// 在 app.use 之前添加错误处理中间件
+app.use((err, req, res, next) => {
+  log(`错误: ${err.message}`);
+  res.status(500).json({ error: '服务器内部错误' });
+});
 
 // 执行脚本的函数
 function executeScript(scriptPath) {
   return new Promise((resolve, reject) => {
     exec(`sh ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
+        log(`脚本执行错误: ${error.message}`);
         reject({ error: '执行错误', message: error.message, stdout, stderr });
       } else {
+        log(`脚本执行成功: ${scriptPath}`);
         resolve({ output: stdout.trim(), stderr: stderr.trim() });
       }
     });
   });
 }
-
-// 使用 helmet 中间件增强安全性
-app.use(helmet());
-
-// 静态文件服务
-app.use(express.static(path.join(__dirname, 'public')));
-
-// 添加 CORS 中间件
-const cors = require('cors');
-app.use(cors());
-
-// 添加错误日志记录
-const fs = require('fs');
-const logFile = path.join(__dirname, 'error.log');
 
 // API 路由
 app.get('/api/execute', async (req, res) => {
@@ -56,47 +62,40 @@ app.get('/api/execute', async (req, res) => {
     res.json({
       success: true,
       scriptId: scriptNumber,
-      scriptPath,
-      ...result,
-      params: req.query
+      ...result
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       scriptId: scriptNumber,
-      scriptPath,
-      ...error,
-      params: req.query
+      ...error
     });
   }
 });
 
 // 获取可用脚本列表
 app.get('/api/scripts', (req, res) => {
-  const scriptList = Object.entries(scripts).map(([id, path]) => ({
+  const scriptList = Object.keys(scripts).map(id => ({
     id,
-    name: `脚本 ${id}`,
-    path
+    name: `脚本 ${id}`
   }));
   res.json(scriptList);
-});
-
-// 错误处理中间件
-app.use((err, req, res, next) => {
-  const errorMessage = `[${new Date().toISOString()}] ${err.stack}\n`;
-  fs.appendFile(logFile, errorMessage, (appendErr) => {
-    if (appendErr) console.error('无法写入错误日志:', appendErr);
-  });
-  console.error(err.stack);
-  res.status(500).json({ error: '服务器内部错误' });
-});
-
-// 为了确保 React 路由正常工作，添加以下路由
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 启动服务器
 app.listen(port, () => {
   console.log(`服务器运行在 http://localhost:${port}/`);
+});
+
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 100 // 限制每个 IP 15 分钟内最多 100 个请求
+});
+
+app.use(limiter);
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
 });

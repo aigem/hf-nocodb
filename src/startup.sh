@@ -95,7 +95,7 @@ if [ ! -f "package.json" ]; then
 fi
 
 # 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production pnpm start > /home/nocodb/static/api-exec.log 2>&1 &
+NODE_ENV=production node server.js > /home/nocodb/static/api-exec.log 2>&1 &
 API_EXEC_PID=$!
 sleep 2
 log "api-exec 进程 ID: $API_EXEC_PID"

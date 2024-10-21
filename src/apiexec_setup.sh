@@ -20,10 +20,6 @@ npm install -g pnpm
 echo "安装所有依赖，包括开发依赖"
 NODE_ENV=development pnpm install
 
-# 构建 React 应用
-echo "构建 api-exec React 应用..."
-NODE_ENV=production pnpm build
-
 # 清理临时文件
 rm -rf /tmp/api-exec
 
