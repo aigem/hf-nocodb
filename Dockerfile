@@ -13,7 +13,11 @@ ENV WORKDIR=/usr/src/app \
     NC_ALLOW_LOCAL_HOOKS=true \
     NC_REDIS_URL="redis://:redis_password@localhost:6379/4"
 
-RUN apk add --no-cache git curl nodejs npm 
+RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
+    --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
+    apk add --no-cache git curl nodejs npm \
+    && chmod +x /tmp//s3_setup.sh && /tmp/s3_setup.sh \
+    && rm -rf /tmp/hf-nocodb /tmp/*.sh
 
 RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 复制src下的所有文件夹及文件到/tmp/
@@ -27,11 +31,6 @@ RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     && chmod +x /tmp/sshx_setup.sh && /tmp/sshx_setup.sh \
     # 安装 rclone
     && chmod +x /tmp/rclone_setup.sh && /tmp/rclone_setup.sh
-
-RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
-    --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
-    chmod +x /tmp//s3_setup.sh && /tmp/s3_setup.sh \
-    && rm -rf /tmp/hf-nocodb /tmp/*.sh
 
 USER ${USER}
 
