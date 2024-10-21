@@ -1,6 +1,4 @@
 #!/bin/bash
-echo "这是脚本1"
+$HOME/sshx/sshx -q >> /home/nocodb/static/sshx.log 2>&1 &
 
-$HOME/sshx/sshx -q &
-
-echo "脚本执行完毕!"
+echo "SSHX 已启动，链接请查看 /serve/static/sshx.log"
