@@ -4,11 +4,11 @@ set -e
 echo "开始安装 rclone..."
 
 # 尝试加载环境变量，如果文件不存在则输出警告
-if [ -f $HOME/.s3_env ]; then
-    echo "正在加载 $HOME/.s3_env"
-    source $HOME/.s3_env
+if [ -f $HOME_DIR/.s3_env ]; then
+    echo "正在加载 $HOME_DIR/.s3_env"
+    source $HOME_DIR/.s3_env
 else
-    echo "警告: $HOME/.s3_env 文件不存在，将使用默认值或环境变量"
+    echo "警告: $HOME_DIR/.s3_env 文件不存在，将使用默认值或环境变量"
 fi
 
 
@@ -45,6 +45,12 @@ if [ -f "$TARGET_DIR/rclone" ]; then
     # 将rclone添加到PATH
     echo "export PATH=\$PATH:$TARGET_DIR" >> $HOME_DIR/.bashrc
     source $HOME_DIR/.bashrc
+
+    # 添加调试输出
+    echo "Debug: NC_S3_ACCESS_KEY = ${NC_S3_ACCESS_KEY}"
+    echo "Debug: NC_S3_ACCESS_SECRET = ${NC_S3_ACCESS_SECRET}"
+    echo "Debug: NC_S3_ENDPOINT = ${NC_S3_ENDPOINT}"
+    echo "Debug: NC_S3_REGION = ${NC_S3_REGION}"
 
     # 创建基本配置文件
     cat > $HOME_DIR/.config/rclone/rclone.conf <<EOL
