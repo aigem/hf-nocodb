@@ -46,10 +46,20 @@ EOL
 
     echo "已创建基本配置文件: $HOME_DIR/.config/rclone/rclone.conf"
     echo "请使用 'rclone config' 命令来配置您的远程存储"
+
+    # 在文件末尾添加
+    cat >> $HOME_DIR/.config/rclone/rclone.conf <<EOL
+[s3]
+type = s3
+provider = Cloudflare
+access_key_id = ${NC_S3_ACCESS_KEY}
+secret_access_key = ${NC_S3_ACCESS_SECRET}
+endpoint = https://<accountid>.r2.cloudflarestorage.com
+acl = private
+EOL
 else
     echo "rclone 安装失败。请检查下载URL并重试。"
     exit 1
 fi
 
 echo "rclone 安装成功"
-

@@ -49,7 +49,7 @@ function executeScript(scriptPath) {
 }
 
 // API 路由
-app.get('/api/execute', async (req, res) => {
+app.get('/execute', async (req, res) => {
   const scriptNumber = req.query.script;
   const scriptPath = scripts[scriptNumber];
 
@@ -74,7 +74,7 @@ app.get('/api/execute', async (req, res) => {
 });
 
 // 获取可用脚本列表
-app.get('/api/scripts', (req, res) => {
+app.get('/scripts', (req, res) => {
   const scriptList = Object.keys(scripts).map(id => ({
     id,
     name: `脚本 ${id}`
@@ -96,6 +96,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-app.get('/health', (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
