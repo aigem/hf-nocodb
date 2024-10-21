@@ -27,6 +27,7 @@ echo "RCLONE_PATH: $RCLONE_PATH"
 # 检查rclone是否存在
 if [ -f "$RCLONE_PATH" ]; then
     echo "rclone 已找到"
+    echo "rclone 版本: $($RCLONE_PATH --version | head -n 1)"
 else
     echo "错误: rclone 未找到"
     exit 1
@@ -82,7 +83,7 @@ cat "$TEMP_RCLONE_CONFIG"
 echo "尝试列出存储桶内容..."
 $RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" ls "s3:$NC_S3_BUCKET_NAME"
 echo "开始上传备份文件到S3兼容的存储服务..."
-$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/" -vv --no-check-bucket
+$RCLONE_PATH --config "$TEMP_RCLONE_CONFIG" copy "$BACKUP_FILE" "s3:$NC_S3_BUCKET_NAME/nocodb-backups/" -vv
 
 # 检查上传是否成功
 if [ $? -eq 0 ]; then
