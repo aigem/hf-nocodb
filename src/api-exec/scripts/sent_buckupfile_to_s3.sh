@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# 加载环境变量
-source /etc/profile.d/s3_env.sh
+# 尝试加载环境变量，如果文件不存在则输出警告
+if [ -f $HOME/.s3_env ]; then
+    source $HOME/.s3_env
+else
+    echo "警告: $HOME/.s3_env 文件不存在，将使用默认值或环境变量"
+fi
 
 # 设置rclone路径
 RCLONE_PATH="$HOME/rclone/rclone"
@@ -15,6 +19,12 @@ fi
 
 if [ ! -f "$BACKUP_FILE" ]; then
     echo "备份文件不存在: $BACKUP_FILE"
+    exit 1
+fi
+
+# 检查必要的环境变量是否存在
+if [ -z "$NC_S3_ACCESS_KEY" ] || [ -z "$NC_S3_ACCESS_SECRET" ] || [ -z "$NC_S3_ENDPOINT" ] || [ -z "$NC_S3_REGION" ] || [ -z "$NC_S3_BUCKET_NAME" ]; then
+    echo "错误: 缺少必要的S3环境变量"
     exit 1
 fi
 
@@ -37,9 +47,5 @@ else
     echo "备份文件上传失败，请检查rclone配置和S3兼容存储服务的权限"
     exit 1
 fi
-
-# 可选：删除本地备份文件
-# rm "$BACKUP_FILE"
-# echo "本地备份文件已删除"
 
 echo "备份过程完成"

@@ -1,8 +1,18 @@
 #!/bin/sh
 set -e
 
+# 加载 S3 环境变量
+if [ -f $HOME/.s3_env ]; then
+    source $HOME/.s3_env
+fi
+
 # 保存当前工作目录
 ORIGINAL_DIR=$(pwd)
+
+# 导入 /etc/profile.d/s3_env.sh
+if [ -f /etc/profile.d/s3_env.sh ]; then
+    source /etc/profile.d/s3_env.sh
+fi
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"

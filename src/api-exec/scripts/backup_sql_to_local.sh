@@ -21,24 +21,30 @@ mkdir -p "$BACKUP_DIR"
 echo "开始备份数据库..."
 PGPASSWORD="$DB_PASSWORD" pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f "$BACKUP_FILE"
 
-# 使用 rclone 将备份文件上传到远程存储（如果已配置）的函数
-function rclone_backup_file() {
-    if command -v "$dir_rclone/rclone" &> /dev/null; then
-        echo "正在使用 rclone 上传备份文件..."
-        "$dir_rclone/rclone" copy "$BACKUP_FILE" remote:nocodb-backups/
-        if [ $? -eq 0 ]; then
-            echo "备份文件已成功上传到远程存储"
-        else
-            echo "备份文件上传失败，请检查 rclone 配置"
-        fi
-    else
-        echo "rclone 未安装或未配置，跳过远程上传"
-    fi
-}
-
 # 检查备份是否成功
 if [ $? -eq 0 ]; then
     echo "数据库备份成功: $BACKUP_FILE $TIMESTAMP"
+    
+    # 使用 rclone 将备份文件上传到远程存储（如果已配置）的函数
+    function rclone_backup_file() {
+        if command -v "$dir_rclone/rclone" &> /dev/null; then
+            echo "正在使用 rclone 上传备份文件..."
+            "$dir_rclone/rclone" copy "$BACKUP_FILE" remote:nocodb-backups/
+            if [ $? -eq 0 ]; then
+                echo "备份文件已成功上传到远程存储"
+            else
+                echo "备份文件上传失败，请检查 rclone 配置"
+            fi
+        else
+            echo "rclone 未安装或未配置，跳过远程上传"
+        fi
+    }
 
     # 调用 rclone_backup_file 函数
     # rclone_backup_file
+else
+    echo "数据库备份失败"
+    exit 1
+fi
+
+echo "备份过程完成"
