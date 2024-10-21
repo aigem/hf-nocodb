@@ -17,9 +17,8 @@ RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
     apk add --no-cache git curl nodejs npm \
     && chmod +x /tmp//s3_setup.sh && /tmp/s3_setup.sh \
-    && rm -rf /tmp/hf-nocodb /tmp/*.sh
-
-RUN git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
+    && rm -rf /tmp/hf-nocodb /tmp/*.sh \
+    && git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 复制src下的所有文件夹及文件到/tmp/
     && cp -r /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && chmod +x /usr/src/appEntry/startup.sh \
