@@ -14,7 +14,7 @@ log() {
 }
 
 log "启动 PostgreSQL..."
-pg_ctl -D $HOME_DIR/data/pgdata -l $HOME_DIR/static/postgresql.log start
+pg_ctl -D /usr/app/data/pgdata -l $HOME_DIR/static/postgresql.log start
 
 # 等待 PostgreSQL 启动
 for i in $(seq 1 30); do
