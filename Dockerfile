@@ -12,7 +12,8 @@ ENV WORKDIR=/usr/src/app \
     PORT=7861 \
     NC_ALLOW_LOCAL_HOOKS=true \
     NC_REDIS_URL="redis://:redis_password@localhost:6379/4" \
-    RESTORE_BACKUP=true
+    RESTORE_BACKUP=true \
+    HTTP_SERVER_ROOT=/home/nocodb/static
 
 RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \

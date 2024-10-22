@@ -4,9 +4,9 @@ set -e
 echo "安装初始化开始"
 
 # 创建用户和目录
-adduser -D -u 1000 nocodb
-mkdir -p /usr/app/data /run/postgresql /var/log/redis /var/log/postgresql /var/run/redis /home/nocodb/app/traefik /home/nocodb/static
-chown -R nocodb:nocodb /usr/app /usr/src/app /usr /run/postgresql /var/log/redis /var/log/postgresql /var/log /home/nocodb/app/traefik /home/nocodb/static
+adduser -D -u 1000 $USER
+mkdir -p /usr/app/data /run/postgresql /var/log/redis /var/log/postgresql /var/run/redis $HOME_DIR/app/traefik $HOME_DIR/static
+chown -R $USER:$USER /usr/app /usr/src/app /usr /run/postgresql /var/log/redis /var/log/postgresql /var/log $HOME_DIR/app/traefik $HOME_DIR/static
 
 # 安装软件包
 apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget curl tzdata vim
@@ -15,11 +15,11 @@ apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs np
 npm install -g http-server pm2
 
 # 设置密码
-echo "nocodb:nocodb_password" | chpasswd
+echo "$USER:$USER_PASSWORD" | chpasswd
 
 # 初始化PostgreSQL
-chown nocodb:nocodb /run/postgresql
-su - nocodb -c "initdb -D /usr/app/data/pgdata"
+chown $USER:$USER /run/postgresql
+su - $USER -c "initdb -D /usr/app/data/pgdata"
 echo "host all all 0.0.0.0/0 md5" >> /usr/app/data/pgdata/pg_hba.conf
 echo "listen_addresses='*'" >> /usr/app/data/pgdata/postgresql.conf
 
@@ -32,7 +32,7 @@ sed -i 's/# unixsocket/unixsocket/' /etc/redis.conf
 sed -i 's/# unixsocketperm 700/unixsocketperm 777/' /etc/redis.conf
 echo "pidfile /var/run/redis/redis.pid" >> /etc/redis.conf
 chmod 644 /etc/redis.conf
-chown -R nocodb:nocodb /etc/redis.conf /var/log/redis /var/run/redis /usr/app/data /var/lib/redis
+chown -R $USER:$USER /etc/redis.conf /var/log/redis /var/run/redis /usr/app/data /var/lib/redis
 
 # 安装 Traefik
 TRAEFIK_VERSION=3.1.6
@@ -42,14 +42,14 @@ mv traefik /usr/local/bin/
 rm traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz
 
 # 复制 Traefik 配置文件
-mkdir -p /home/nocodb/app/traefik
-cp /tmp/traefik.yml /home/nocodb/app/traefik/traefik.yml
-cp /tmp/dynamic_conf.yml /home/nocodb/app/traefik/dynamic_conf.yml
-chown -R nocodb:nocodb /home/nocodb/app/traefik
-chmod 644 /home/nocodb/app/traefik/traefik.yml /home/nocodb/app/traefik/dynamic_conf.yml
+mkdir -p $HOME_DIR/app/traefik
+cp /tmp/traefik.yml $HOME_DIR/app/traefik/traefik.yml
+cp /tmp/dynamic_conf.yml $HOME_DIR/app/traefik/dynamic_conf.yml
+chown -R $USER:$USER $HOME_DIR/app/traefik
+chmod 644 $HOME_DIR/app/traefik/traefik.yml $HOME_DIR/app/traefik/dynamic_conf.yml
 
 # 创建静态文件目录
-mkdir -p /home/nocodb/static/serve
-chown -R nocodb:nocodb /home/nocodb/static
+mkdir -p $HOME_DIR/static/serve
+chown -R $USER:$USER $HOME_DIR $HOME_DIR/static
 
 echo "NocoDB 安装初始化完成"
