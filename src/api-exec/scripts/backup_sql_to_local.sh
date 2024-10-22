@@ -17,7 +17,8 @@ BACKUP_FILE="$BACKUP_DIR/nocodb_backup_dump.sql"
 # 确保备份目录存在,不存在则创建
 mkdir -p "$BACKUP_DIR"
 
-# 执行数据库备份
+# 执行数据库备份,先删除旧文件。
+rm -f "$BACKUP_FILE"
 echo "开始备份数据库..."
 PGPASSWORD="$DB_PASSWORD" pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f "$BACKUP_FILE"
 
