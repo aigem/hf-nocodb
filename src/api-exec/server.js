@@ -13,10 +13,8 @@ const port = config.port;
 
 // 定义允许执行的脚本列表
 const allowedScripts = {
-  '1': '1.sh',
-  '2': '2.sh',
-  '3': '3.sh',
-  '4': '4.sh',
+  'sshx_open': 'sshx_open.sh',
+  'sshx_close': 'sshx_close.sh',
   'backup_sql': 'backup_sql_to_local.sh',
   'send_to_s3': 'sent_backupfile_to_s3.sh'
 };
