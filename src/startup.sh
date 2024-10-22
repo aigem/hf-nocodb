@@ -120,7 +120,7 @@ if [ "$RESTORE_BACKUP" = "true" ]; then
         log "restore_backup.sh 文件状态:"
         ls -l /usr/src/appEntry/restore_backup.sh
         chmod +x /usr/src/appEntry/restore_backup.sh
-        /bin/bash /usr/src/appEntry/restore_backup.sh
+        /bin/sh /usr/src/appEntry/restore_backup.sh
     else
         log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
         log "当前目录内容:"
