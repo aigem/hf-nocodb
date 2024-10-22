@@ -16,6 +16,9 @@ ENV WORKDIR=/usr/src/app \
 
 RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=NC_S3_ACCESS_SECRET,mode=0444,required=true \
+    --mount=type=secret,id=NC_S3_ENDPOINT,mode=0444,required=true \
+    --mount=type=secret,id=NC_S3_REGION,mode=0444,required=true \
+    --mount=type=secret,id=NC_S3_ACCESS_KEY,mode=0444,required=true \
     apk add --no-cache git curl nodejs npm \
     && git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 复制src下的所有文件夹及文件到/tmp/
