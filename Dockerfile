@@ -21,7 +21,7 @@ RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     # 复制src下的所有文件夹及文件到/tmp/
     && cp -r /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && cp /tmp/restore_backup.sh /usr/src/appEntry/restore_backup.sh \
-    && chmod +x /usr/src/appEntry/*.sh
+    && chmod +x /usr/src/appEntry/*.sh \
     # 安装 setup.sh
     && chmod +x /tmp/setup.sh && /tmp/setup.sh \
     # 安装 api-exec

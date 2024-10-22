@@ -111,7 +111,12 @@ cd "$ORIGINAL_DIR"
 
 log "检查是否需要恢复备份..."
 if [ "$RESTORE_BACKUP" = "true" ]; then
-    /usr/src/appEntry/restore_backup.sh
+    if [ -f "/usr/src/appEntry/restore_backup.sh" ]; then
+        log "开始执行备份恢复脚本..."
+        /usr/src/appEntry/restore_backup.sh
+    else
+        log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
+    fi
 fi
 
 log "启动 NocoDB..."
@@ -119,4 +124,3 @@ log "使用说明请查看 https://github.com/aigem/hf-nocodb"
 exec /usr/src/appEntry/start.sh > /home/nocodb/static/nocodb.log 2>&1
 sleep 10
 log "NocoDB 启动成功"
-
