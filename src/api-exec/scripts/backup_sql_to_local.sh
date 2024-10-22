@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # 备份 PostgreSQL 数据库 到本地
 
