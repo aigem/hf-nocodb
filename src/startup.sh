@@ -111,7 +111,7 @@ cd "$ORIGINAL_DIR"
 
 log "检查是否需要恢复备份..."
 if [ "$RESTORE_BACKUP" = "true" ]; then
-    $HOME_DIR/restore_backup.sh
+    /usr/src/appEntry/restore_backup.sh
 fi
 
 log "启动 NocoDB..."
