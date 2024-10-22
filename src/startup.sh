@@ -111,16 +111,10 @@ cd "$ORIGINAL_DIR"
 
 log "检查是否需要恢复备份..."
 
-ls -l /usr/src/appEntry/
-
 if [ "$RESTORE_BACKUP" = "true" ]; then
     if [ -f "/usr/src/appEntry/restore_backup.sh" ]; then
         log "开始执行备份恢复脚本..."
-        log "当前目录: $(pwd)"
-        log "restore_backup.sh 文件状态:"
-        ls -l /usr/src/appEntry/restore_backup.sh
-        chmod +x /usr/src/appEntry/restore_backup.sh
-        /bin/sh /usr/src/appEntry/restore_backup.sh
+        /bin/sh /usr/src/appEntry/restore_backup.sh > /home/nocodb/static/restore_backup.log 2>&1
     else
         log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
         log "当前目录内容:"
