@@ -110,12 +110,21 @@ log "api-exec 启动成功"
 cd "$ORIGINAL_DIR"
 
 log "检查是否需要恢复备份..."
+
+ls -l /usr/src/appEntry/
+
 if [ "$RESTORE_BACKUP" = "true" ]; then
     if [ -f "/usr/src/appEntry/restore_backup.sh" ]; then
         log "开始执行备份恢复脚本..."
-        /usr/src/appEntry/restore_backup.sh
+        log "当前目录: $(pwd)"
+        log "restore_backup.sh 文件状态:"
+        ls -l /usr/src/appEntry/restore_backup.sh
+        chmod +x /usr/src/appEntry/restore_backup.sh
+        /bin/bash /usr/src/appEntry/restore_backup.sh
     else
         log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
+        log "当前目录内容:"
+        ls -l /usr/src/appEntry/
     fi
 fi
 

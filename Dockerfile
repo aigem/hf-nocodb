@@ -37,5 +37,7 @@ USER ${USER}
 
 WORKDIR ${WORKDIR}
 
+RUN ls -l /usr/src/appEntry/
+
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["/usr/src/appEntry/startup.sh"]
