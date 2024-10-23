@@ -6,7 +6,7 @@ echo "安装初始化开始"
 # 创建用户和目录
 adduser -D -u 1000 $USER
 mkdir -p /usr/app/data /run/postgresql /var/log/redis /var/log/postgresql /var/run/redis $HOME_DIR/app/traefik $HOME_DIR/static
-chown -R $USER:$USER /usr/app /usr/src/app /usr /run/postgresql /var/log/redis /var/log/postgresql /var/log $HOME_DIR/app/traefik $HOME_DIR/static
+chown -R $USER:$USER /usr/app $WORKDIR /usr /run/postgresql /var/log/redis /var/log/postgresql /var/log $HOME_DIR/app/traefik $HOME_DIR/static
 
 # 安装软件包
 apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget curl tzdata vim
