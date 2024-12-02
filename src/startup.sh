@@ -21,6 +21,7 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     log "已导入 .nocodb_env 环境变量"
     # 显示变量内容
     echo "DATABASE_URL: $DATABASE_URL"
+    echo "$NC_DB"
 
 fi
 
