@@ -76,18 +76,35 @@ fi
 log "启动 NocoDB..."
 log "使用说明请查看 https://github.com/aigem/hf-nocodb"
 # 先启动 NocoDB
+cd ${WORKDIR}
 /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1 &
 NOCODB_PID=$!
 
 # 等待 NocoDB 启动
 for i in $(seq 1 30); do
-    if curl -s http://localhost:7861 > /dev/null; then
+    if curl -s http://localhost:7861/api/health > /dev/null; then
         log "NocoDB 服务已启动"
         break
     fi
     log "等待 NocoDB 启动..."
-    sleep 1
+    sleep 2
 done
+
+# 检查 NocoDB 是否真正启动
+if ! curl -s http://localhost:7861/api/health > /dev/null; then
+    log "错误：NocoDB 服务未能正常启动"
+    log "NocoDB 日志内容："
+    cat $HOME_DIR/static/nocodb.log
+    exit 1
+fi
+
+# 检查进程状态的正确方式
+if ! kill -0 $NOCODB_PID 2>/dev/null; then
+    log "错误：NocoDB 进程已退出"
+    log "NocoDB 日志内容："
+    cat $HOME_DIR/static/nocodb.log
+    exit 1
+fi
 
 log "启动 Traefik..."
 traefik --configfile=$HOME_DIR/app/traefik/traefik.yml > $HOME_DIR/static/traefik.log 2>&1 &
@@ -104,21 +121,6 @@ for i in $(seq 1 30); do
     log "等待 Traefik 启动..."
     sleep 1
 done
-
-# 检查服务状态
-if ! ps -p $NOCODB_PID > /dev/null; then
-    log "错误：NocoDB 进程已退出"
-    log "NocoDB 日志内容："
-    cat $HOME_DIR/static/nocodb.log || true
-    exit 1
-fi
-
-if ! ps -p $TRAEFIK_PID > /dev/null; then
-    log "错误：Traefik 进程已退出"
-    log "Traefik 日志内容："
-    cat $HOME_DIR/static/traefik.log || true
-    exit 1
-fi
 
 # 保持容器运行
 tail -f $HOME_DIR/static/nocodb.log $HOME_DIR/static/traefik.log

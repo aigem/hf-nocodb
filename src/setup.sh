@@ -20,8 +20,33 @@ echo "$USER:$USER_PASSWORD" | chpasswd
 # 初始化PostgreSQL
 chown $USER:$USER /run/postgresql
 su - $USER -c "initdb -D /usr/app/data/pgdata"
-echo "host all all 0.0.0.0/0 md5" >> /usr/app/data/pgdata/pg_hba.conf
-echo "listen_addresses='*'" >> /usr/app/data/pgdata/postgresql.conf
+
+# 修改 PostgreSQL 配置
+cat >> /usr/app/data/pgdata/postgresql.conf << EOF
+listen_addresses = '*'
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+max_wal_size = 1GB
+min_wal_size = 80MB
+log_destination = 'stderr'
+logging_collector = on
+log_directory = '$HOME_DIR/static'
+log_filename = 'postgresql.log'
+log_statement = 'none'
+EOF
+
+# 配置访问权限
+cat > /usr/app/data/pgdata/pg_hba.conf << EOF
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
+host    all             all             0.0.0.0/0               md5
+EOF
+
+# 确保日志目录存在
+mkdir -p $HOME_DIR/static
+chown -R $USER:$USER $HOME_DIR/static
 
 # 配置Redis
 sed -i 's/# requirepass foobared/requirepass redis_password/' /etc/redis.conf

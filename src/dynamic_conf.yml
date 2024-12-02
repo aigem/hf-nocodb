@@ -6,10 +6,25 @@ http:
       entryPoints:
         - web
       priority: 1
+      middlewares:
+        - nocodb-strip
 
   services:
     nocodb-service:
       loadBalancer:
+        passHostHeader: true
+        healthCheck:
+          path: /
+          interval: "10s"
+          timeout: "5s"
         servers:
-          - url: "http://localhost:7861"
+          - url: "http://127.0.0.1:7861"
+
+  middlewares:
+    nocodb-strip:
+      stripPrefix:
+        prefixes: []
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
 
