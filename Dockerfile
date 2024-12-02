@@ -20,6 +20,7 @@ RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     --mount=type=secret,id=DB_User,mode=0444,required=true \
     --mount=type=secret,id=DB_Password,mode=0444,required=true \
     --mount=type=secret,id=DB_Database,mode=0444,required=true \
+    --mount=type=secret,id=DATABASE_URL,mode=0444,required=true \
     apk add --no-cache git curl nodejs npm \
     && git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 复制src下的所有文件夹及文件到/tmp/

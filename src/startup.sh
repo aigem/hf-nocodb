@@ -115,7 +115,15 @@ fi
 
 log "启动 NocoDB..."
 log "使用说明请查看 https://github.com/aigem/hf-nocodb"
+
+# 确保环境变量被正确导出
+if [ -f $HOME_DIR/.nocodb_env ]; then
+    set -a  # 自动导出所有变量
+    source $HOME_DIR/.nocodb_env
+    set +a
+fi
+
 exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
-# exec /usr/src/appEntry/start.sh
+
 sleep 10
 log "NocoDB 启动成功"
