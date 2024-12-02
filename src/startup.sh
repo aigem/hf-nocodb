@@ -6,7 +6,7 @@ log() {
 }
 
 if [ -f $HOME_DIR/.s3_env ]; then
-    source $HOME_DIR/.s3_env
+    # source $HOME_DIR/.s3_env
     log "已导入 s3_env 环境变量"
     # 显示变量内容
     echo "NC_S3_BUCKET_NAME: $NC_S3_BUCKET_NAME"
@@ -20,10 +20,8 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     source $HOME_DIR/.nocodb_env
     log "已导入 .nocodb_env 环境变量"
     # 显示变量内容
-    echo "DB_Host: $DB_Host"
-    echo "DB_Port: $DB_Port"
-    echo "DB_User: $DB_User"
-    echo "DB_Database: $DB_Database"
+    echo "DATABASE_URL: $DATABASE_URL"
+
 fi
 
 log "启动 PostgreSQL..."
@@ -123,7 +121,7 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     set +a
 fi
 
-exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
+exec /usr/src/appEntry/start.sh
 
 sleep 10
 log "NocoDB 启动成功"
