@@ -5,9 +5,8 @@ log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
 }
 
-# 导入 /etc/profile.d/s3_env.sh
-if [ -f /etc/profile.d/s3_env.sh ]; then
-    source /etc/profile.d/s3_env.sh
+if [ -f $HOME_DIR/.s3_env ]; then
+    source $HOME_DIR/.s3_env
     log "已导入 s3_env 环境变量"
     # 显示变量内容
     echo "NC_S3_BUCKET_NAME: $NC_S3_BUCKET_NAME"

@@ -6,11 +6,7 @@ ARG CACHEBUST=11
 ENV WORKDIR=/usr/src/app \
     USER=nocodb \
     HOME_DIR=/home/$USER \
-    NC_AUTH_JWT_SECRET=nocodb_jwt_secret \
-    NC_TOOL_DIR=/usr/app/data/ \
     PORT=7861 \
-    NC_ALLOW_LOCAL_HOOKS=true \
-    NC_REDIS_URL="redis://:redis_password@localhost:6379/4" \
     RESTORE_BACKUP=false \
     HTTP_SERVER_ROOT=/home/nocodb/static
 
