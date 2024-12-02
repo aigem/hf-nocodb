@@ -1,6 +1,6 @@
 FROM nocodb/nocodb:latest
 
-ARG CACHEBUST=10
+ARG CACHEBUST=11
 
 # 设置环境变量
 ENV WORKDIR=/usr/src/app \
@@ -40,8 +40,6 @@ RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     && chmod +x /tmp/s3_setup.sh && /tmp/s3_setup.sh \
     # nocodb设置
     && chmod +x /tmp/nocodb_setup.sh && /tmp/nocodb_setup.sh
-    # rclone安装与设置
-    # && chmod +x /tmp/rclone_setup.sh && /tmp/rclone_setup.sh
 
 USER ${USER}
 
