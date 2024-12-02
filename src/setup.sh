@@ -61,4 +61,14 @@ chmod 755 $HOME_DIR/app/traefik
 mkdir -p $HOME_DIR/static/serve
 chown -R $USER:$USER $HOME_DIR $HOME_DIR/static
 
+# 确保日志目录存在并设置正确权限
+mkdir -p $HOME_DIR/static
+chown -R $USER:$USER $HOME_DIR/static
+chmod 755 $HOME_DIR/static
+
+# 创建并设置日志文件权限
+touch $HOME_DIR/static/nocodb.log $HOME_DIR/static/traefik.log $HOME_DIR/static/access.log
+chown $USER:$USER $HOME_DIR/static/*.log
+chmod 644 $HOME_DIR/static/*.log
+
 echo "NocoDB 安装初始化完成"

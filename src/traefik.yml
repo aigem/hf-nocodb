@@ -1,6 +1,8 @@
 entryPoints:
   web:
     address: ":7860"
+    forwardedHeaders:
+      insecure: true
 
 providers:
   file:
@@ -10,8 +12,11 @@ providers:
 api:
   insecure: true
   dashboard: true
+  debug: true
 
 log:
   level: DEBUG
+  filePath: "/home/nocodb/static/traefik.log"
 
-accessLog: {}
+accessLog:
+  filePath: "/home/nocodb/static/access.log"

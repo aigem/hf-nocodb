@@ -1,33 +1,15 @@
 http:
   routers:
-    nocodb:
+    nocodb-router:
       rule: "PathPrefix(`/`)"
+      service: nocodb-service
+      entryPoints:
+        - web
       priority: 1
-      service: nocodb
-      entryPoints:
-        - web
-    serve:
-      rule: "PathPrefix(`/serve`)"
-      priority: 2
-      service: serve
-      entryPoints:
-        - web
-      middlewares:
-        - serve-stripprefix
+
   services:
-    nocodb:
+    nocodb-service:
       loadBalancer:
-        passHostHeader: true
         servers:
-          - url: "http://127.0.0.1:7861"
-    serve:
-      loadBalancer:
-        passHostHeader: true
-        servers:
-          - url: "http://127.0.0.1:7862"
-  middlewares:
-    serve-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/serve"
+          - url: "http://localhost:7861"
 

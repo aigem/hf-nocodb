@@ -73,65 +73,52 @@ if ! curl -s http://localhost:7862 > /dev/null; then
     exit 1
 fi
 
+log "启动 NocoDB..."
+log "使用说明请查看 https://github.com/aigem/hf-nocodb"
+# 先启动 NocoDB
+/usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1 &
+NOCODB_PID=$!
+
+# 等待 NocoDB 启动
+for i in $(seq 1 30); do
+    if curl -s http://localhost:7861 > /dev/null; then
+        log "NocoDB 服务已启动"
+        break
+    fi
+    log "等待 NocoDB 启动..."
+    sleep 1
+done
+
 log "启动 Traefik..."
 traefik --configfile=$HOME_DIR/app/traefik/traefik.yml > $HOME_DIR/static/traefik.log 2>&1 &
 TRAEFIK_PID=$!
 
-# 等待 Traefik 启动并检查健康状态
+# 等待 Traefik 启动
 for i in $(seq 1 30); do
     if curl -s http://localhost:7860/api/http/routers > /dev/null; then
         log "Traefik API 可访问"
-        # 检查路由是否正确加载
         ROUTES=$(curl -s http://localhost:7860/api/http/routers)
-        if echo "$ROUTES" | grep -q "nocodb@file"; then
-            log "Traefik 路由配置已加载"
-            break
-        fi
+        echo "当前路由配置: $ROUTES"
+        break
     fi
-    log "等待 Traefik 完全启动..."
+    log "等待 Traefik 启动..."
     sleep 1
 done
 
-# 验证 NocoDB 服务是否可访问
-if ! curl -s http://localhost:7861 > /dev/null; then
-    log "警告：NocoDB 服务未响应"
-    log "检查 NocoDB 日志..."
-    tail -n 50 $HOME_DIR/static/nocodb.log
-fi
-
-# 检查 Traefik 配置文件
-if [ ! -f "$HOME_DIR/app/traefik/traefik.yml" ] || [ ! -f "$HOME_DIR/app/traefik/dynamic_conf.yml" ]; then
-    log "Traefik 配置文件缺失"
+# 检查服务状态
+if ! ps -p $NOCODB_PID > /dev/null; then
+    log "错误：NocoDB 进程已退出"
+    log "NocoDB 日志内容："
+    cat $HOME_DIR/static/nocodb.log || true
     exit 1
 fi
 
-# 输出 Traefik 路由信息用于调试
-curl -s http://localhost:7860/api/http/routers | grep -v password || true
-
-log "检查 Traefik 配置文件..."
-if [ ! -f "$HOME_DIR/app/traefik/traefik.yml" ] || [ ! -f "$HOME_DIR/app/traefik/dynamic_conf.yml" ]; then
-    log "Traefik 配置文件缺失"
+if ! ps -p $TRAEFIK_PID > /dev/null; then
+    log "错误：Traefik 进程已退出"
+    log "Traefik 日志内容："
+    cat $HOME_DIR/static/traefik.log || true
     exit 1
 fi
-sleep 5
-log "Traefik 启动成功"
 
-log "检查是否需要恢复备份..."
-
-if [ "$RESTORE_BACKUP" = "true" ]; then
-    if [ -f "/usr/src/appEntry/restore_backup.sh" ]; then
-        log "开始执行备份恢复脚本..."
-        /bin/sh /usr/src/appEntry/restore_backup.sh > $HOME_DIR/static/restore_backup.log 2>&1
-    else
-        log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
-        log "当前目录内容:"
-        ls -l /usr/src/appEntry/
-    fi
-fi
-
-log "启动 NocoDB..."
-log "使用说明请查看 https://github.com/aigem/hf-nocodb"
-# exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
-exec /usr/src/appEntry/start.sh
-sleep 10
-log "NocoDB 启动成功"
+# 保持容器运行
+tail -f $HOME_DIR/static/nocodb.log $HOME_DIR/static/traefik.log
