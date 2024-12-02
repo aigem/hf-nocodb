@@ -9,11 +9,22 @@ log() {
 if [ -f /etc/profile.d/s3_env.sh ]; then
     source /etc/profile.d/s3_env.sh
     log "已导入 s3_env 环境变量"
+    # 显示变量内容
+    echo "NC_S3_BUCKET_NAME: $NC_S3_BUCKET_NAME"
+    echo "NC_S3_ACCESS_KEY: $NC_S3_ACCESS_KEY"
+    echo "NC_S3_ACCESS_SECRET: $NC_S3_ACCESS_SECRET"
+    echo "NC_S3_ENDPOINT: $NC_S3_ENDPOINT"
+    echo "NC_S3_REGION: $NC_S3_REGION"
 fi
 
 if [ -f $HOME_DIR/.nocodb_env ]; then
     source $HOME_DIR/.nocodb_env
     log "已导入 .nocodb_env 环境变量"
+    # 显示变量内容
+    echo "DB_Host: $DB_Host"
+    echo "DB_Port: $DB_Port"
+    echo "DB_User: $DB_User"
+    echo "DB_Database: $DB_Database"
 fi
 
 log "启动 PostgreSQL..."
@@ -105,6 +116,7 @@ fi
 
 log "启动 NocoDB..."
 log "使用说明请查看 https://github.com/aigem/hf-nocodb"
-exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
+# exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
+exec /usr/src/appEntry/start.sh
 sleep 10
 log "NocoDB 启动成功"

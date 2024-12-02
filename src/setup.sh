@@ -12,7 +12,7 @@ chown -R $USER:$USER /usr/app $WORKDIR /usr /run/postgresql /var/log/redis /var/
 apk add --no-cache postgresql postgresql-contrib redis dasel dumb-init nodejs npm wget curl tzdata vim
 
 # 安装 http-server
-npm install -g http-server pm2
+npm install -g http-server
 
 # 设置密码
 echo "$USER:$USER_PASSWORD" | chpasswd
