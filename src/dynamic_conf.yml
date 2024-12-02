@@ -1,20 +1,28 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`)"
+      rule: "PathPrefix(`/`)"
+      priority: 1
       service: nocodb
+      entryPoints:
+        - web
     serve:
       rule: "PathPrefix(`/serve`)"
+      priority: 2
       service: serve
+      entryPoints:
+        - web
       middlewares:
         - serve-stripprefix
   services:
     nocodb:
       loadBalancer:
+        passHostHeader: true
         servers:
           - url: "http://127.0.0.1:7861"
     serve:
       loadBalancer:
+        passHostHeader: true
         servers:
           - url: "http://127.0.0.1:7862"
   middlewares:

@@ -47,6 +47,15 @@ cp /tmp/traefik.yml $HOME_DIR/app/traefik/traefik.yml
 cp /tmp/dynamic_conf.yml $HOME_DIR/app/traefik/dynamic_conf.yml
 chown -R $USER:$USER $HOME_DIR/app/traefik
 chmod 644 $HOME_DIR/app/traefik/traefik.yml $HOME_DIR/app/traefik/dynamic_conf.yml
+chmod 755 $HOME_DIR/app/traefik
+
+# 验证 Traefik 配置文件权限
+echo "验证 Traefik 配置文件权限..."
+ls -l $HOME_DIR/app/traefik/traefik.yml
+ls -l $HOME_DIR/app/traefik/dynamic_conf.yml
+chown -R $USER:$USER $HOME_DIR/app/traefik
+chmod 644 $HOME_DIR/app/traefik/traefik.yml $HOME_DIR/app/traefik/dynamic_conf.yml
+chmod 755 $HOME_DIR/app/traefik
 
 # 创建静态文件目录
 mkdir -p $HOME_DIR/static/serve

@@ -5,9 +5,13 @@ entryPoints:
 providers:
   file:
     filename: /home/nocodb/app/traefik/dynamic_conf.yml
+    watch: true
 
 api:
   insecure: true
+  dashboard: true
 
 log:
-  level: INFO
+  level: DEBUG
+
+accessLog: {}
