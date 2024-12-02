@@ -20,9 +20,28 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     source $HOME_DIR/.nocodb_env
     log "已导入 .nocodb_env 环境变量"
     # 显示变量内容
-    echo "DATABASE_URL: $DATABASE_URL"
-    echo "$NC_DB"
-
+    echo "NC_DB: $NC_DB"
+    
+    # 测试 Supabase 数据库连接
+    log "测试 Supabase 数据库连接..."
+    if PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -c "\l"; then
+        log "Supabase 数据库连接成功"
+        # 检查数据库权限
+        log "检查数据库权限..."
+        if PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -c "CREATE TABLE IF NOT EXISTS test_connection (id serial primary key); DROP TABLE test_connection;"; then
+            log "数据库权限检查通过"
+        else
+            log "数据库权限不足，请确保用户具有创建表的权限"
+            exit 1
+        fi
+    else
+        log "Supabase 数据库连接失败，请检查连接信息"
+        echo "Host: ${DB_HOST}"
+        echo "Port: ${DB_PORT}"
+        echo "User: ${DB_USER}"
+        echo "Database: ${DB_NAME}"
+        exit 1
+    fi
 fi
 
 log "启动 PostgreSQL..."
