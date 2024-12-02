@@ -73,54 +73,49 @@ if ! curl -s http://localhost:7862 > /dev/null; then
     exit 1
 fi
 
-log "启动 NocoDB..."
-log "使用说明请查看 https://github.com/aigem/hf-nocodb"
-# 先启动 NocoDB
-cd ${WORKDIR}
-/usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1 &
-NOCODB_PID=$!
-
-# 等待 NocoDB 启动
-for i in $(seq 1 30); do
-    if curl -s http://localhost:7861/api/health > /dev/null; then
-        log "NocoDB 服务已启动"
-        break
-    fi
-    log "等待 NocoDB 启动..."
-    sleep 2
-done
-
-# 检查 NocoDB 是否真正启动
-if ! curl -s http://localhost:7861/api/health > /dev/null; then
-    log "错误：NocoDB 服务未能正常启动"
-    log "NocoDB 日志内容："
-    cat $HOME_DIR/static/nocodb.log
-    exit 1
-fi
-
-# 检查进程状态的正确方式
-if ! kill -0 $NOCODB_PID 2>/dev/null; then
-    log "错误：NocoDB 进程已退出"
-    log "NocoDB 日志内容："
-    cat $HOME_DIR/static/nocodb.log
-    exit 1
-fi
-
 log "启动 Traefik..."
 traefik --configfile=$HOME_DIR/app/traefik/traefik.yml > $HOME_DIR/static/traefik.log 2>&1 &
 TRAEFIK_PID=$!
 
 # 等待 Traefik 启动
 for i in $(seq 1 30); do
-    if curl -s http://localhost:7860/api/http/routers > /dev/null; then
-        log "Traefik API 可访问"
-        ROUTES=$(curl -s http://localhost:7860/api/http/routers)
-        echo "当前路由配置: $ROUTES"
+    if curl -s http://localhost:7860 > /dev/null; then
+        log "Traefik 已启动"
         break
     fi
     log "等待 Traefik 启动..."
     sleep 1
 done
 
-# 保持容器运行
-tail -f $HOME_DIR/static/nocodb.log $HOME_DIR/static/traefik.log
+if ! curl -s http://localhost:7860 > /dev/null; then
+    log "Traefik 启动失败"
+    exit 1
+fi
+
+log "检查 Traefik 配置文件..."
+if [ ! -f "$HOME_DIR/app/traefik/traefik.yml" ] || [ ! -f "$HOME_DIR/app/traefik/dynamic_conf.yml" ]; then
+    log "Traefik 配置文件缺失"
+    exit 1
+fi
+sleep 5
+log "Traefik 启动成功"
+
+log "检查是否需要恢复备份..."
+
+if [ "$RESTORE_BACKUP" = "true" ]; then
+    if [ -f "/usr/src/appEntry/restore_backup.sh" ]; then
+        log "开始执行备份恢复脚本..."
+        /bin/sh /usr/src/appEntry/restore_backup.sh > $HOME_DIR/static/restore_backup.log 2>&1
+    else
+        log "错误：备份恢复脚本不存在 (/usr/src/appEntry/restore_backup.sh)"
+        log "当前目录内容:"
+        ls -l /usr/src/appEntry/
+    fi
+fi
+
+log "启动 NocoDB..."
+log "使用说明请查看 https://github.com/aigem/hf-nocodb"
+# exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
+exec /usr/src/appEntry/start.sh
+sleep 10
+log "NocoDB 启动成功"

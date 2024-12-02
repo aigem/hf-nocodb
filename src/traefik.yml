@@ -1,22 +1,13 @@
 entryPoints:
   web:
     address: ":7860"
-    forwardedHeaders:
-      insecure: true
 
 providers:
   file:
     filename: /home/nocodb/app/traefik/dynamic_conf.yml
-    watch: true
 
 api:
   insecure: true
-  dashboard: true
-  debug: true
 
 log:
-  level: DEBUG
-  filePath: "/home/nocodb/static/traefik.log"
-
-accessLog:
-  filePath: "/home/nocodb/static/access.log"
+  level: INFO
