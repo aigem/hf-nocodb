@@ -20,7 +20,7 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     source $HOME_DIR/.nocodb_env
     log "已导入 .nocodb_env 环境变量"
     # 显示变量内容
-    echo "NC_DB: $NC_DB"
+    echo "NC_DB:$NC_DB"
     
     # 测试 Supabase 数据库连接
     log "测试 Supabase 数据库连接..."
