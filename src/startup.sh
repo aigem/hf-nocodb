@@ -115,7 +115,50 @@ fi
 
 log "启动 NocoDB..."
 log "使用说明请查看 https://github.com/aigem/hf-nocodb"
-# exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
-exec /usr/src/appEntry/start.sh
+exec /usr/src/appEntry/start.sh > $HOME_DIR/static/nocodb.log 2>&1
+# exec /usr/src/appEntry/start.sh
 sleep 10
 log "NocoDB 启动成功"
+
+# 显示各服务的日志状态
+log "检查各服务日志..."
+
+# 检查 Traefik 日志
+if [ -f "$HOME_DIR/static/traefik.log" ]; then
+    log "Traefik 最新日志:"
+    tail -n 100 $HOME_DIR/static/traefik.log
+else
+    log "警告: Traefik 日志文件不存在"
+fi
+
+# 检查 PostgreSQL 日志
+if [ -f "$HOME_DIR/static/postgresql.log" ]; then
+    log "PostgreSQL 最新日志:"
+    tail -n 10 $HOME_DIR/static/postgresql.log
+else
+    log "警告: PostgreSQL 日志文件不存在"
+fi
+
+# 检查 Redis 日志
+if [ -f "$HOME_DIR/static/redis.log" ]; then
+    log "Redis 最新日志:"
+    tail -n 10 $HOME_DIR/static/redis.log
+else
+    log "警告: Redis 日志文件不存在"
+fi
+
+# 检查 http-server 日志
+if [ -f "$HOME_DIR/static/http-server.log" ]; then
+    log "Http-server 最新日志:"
+    tail -n 10 $HOME_DIR/static/http-server.log
+else
+    log "警告: Http-server 日志文件不存在"
+fi
+
+# 检查 NocoDB 日志
+if [ -f "$HOME_DIR/static/nocodb.log" ]; then
+    log "NocoDB 最新日志:"
+    tail -n 50 $HOME_DIR/static/nocodb.log
+else
+    log "警告: NocoDB 日志文件不存在"
+fi
