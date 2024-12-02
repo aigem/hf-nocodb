@@ -21,56 +21,35 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     log "已导入 .nocodb_env 环境变量"
     # 显示变量内容
     echo "NC_DB:$NC_DB"
-    
-    # 测试 Supabase 数据库连接
-    log "测试 Supabase 数据库连接..."
-    if PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -c "\l"; then
-        log "Supabase 数据库连接成功"
-        # 检查数据库权限
-        log "检查数据库权限..."
-        if PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" -c "CREATE TABLE IF NOT EXISTS test_connection (id serial primary key); DROP TABLE test_connection;"; then
-            log "数据库权限检查通过"
-        else
-            log "数据库权限不足，请确保用户具有创建表的权限"
-            exit 1
-        fi
-    else
-        log "Supabase 数据库连接失败，请检查连接信息"
-        echo "Host: ${DB_HOST}"
-        echo "Port: ${DB_PORT}"
-        echo "User: ${DB_USER}"
-        echo "Database: ${DB_NAME}"
-        exit 1
-    fi
 fi
 
-log "启动 PostgreSQL..."
-pg_ctl -D /usr/app/data/pgdata -l $HOME_DIR/static/postgresql.log start
+# log "启动 PostgreSQL..."
+# pg_ctl -D /usr/app/data/pgdata -l $HOME_DIR/static/postgresql.log start
 
-# 等待 PostgreSQL 启动
-for i in $(seq 1 30); do
-    if pg_isready -U nocodb; then
-        break
-    fi
-    log "等待 PostgreSQL 启动..."
-    sleep 1
-done
+# # 等待 PostgreSQL 启动
+# for i in $(seq 1 30); do
+#     if pg_isready -U nocodb; then
+#         break
+#     fi
+#     log "等待 PostgreSQL 启动..."
+#     sleep 1
+# done
 
-if ! pg_isready -U nocodb; then
-    log "PostgreSQL 启动失败"
-    exit 2
-fi
+# if ! pg_isready -U nocodb; then
+#     log "PostgreSQL 启动失败"
+#     exit 2
+# fi
 
-log "检查并创建 PostgreSQL 数据库..."
-# 使用 nocodb 用户和 template1 数据库来执行初始命令
-psql -U nocodb -d template1 -c "SELECT 1 FROM pg_database WHERE datname = 'nocodb';" | grep -q 1 || psql -U nocodb -d template1 -c "CREATE DATABASE nocodb;"
-psql -U nocodb -d template1 -c "ALTER USER nocodb WITH PASSWORD 'nocodb_password';"
+# log "检查并创建 PostgreSQL 数据库..."
+# # 使用 nocodb 用户和 template1 数据库来执行初始命令
+# psql -U nocodb -d template1 -c "SELECT 1 FROM pg_database WHERE datname = 'nocodb';" | grep -q 1 || psql -U nocodb -d template1 -c "CREATE DATABASE nocodb;"
+# psql -U nocodb -d template1 -c "ALTER USER nocodb WITH PASSWORD 'nocodb_password';"
 
-log "PostgreSQL 启动成功"
+# log "PostgreSQL 启动成功"
 
-log "启动 Redis..."
-redis-server /etc/redis.conf --port 6379 --daemonize yes --logfile $HOME_DIR/static/redis.log
-log "Redis 启动成功"
+# log "启动 Redis..."
+# redis-server /etc/redis.conf --port 6379 --daemonize yes --logfile $HOME_DIR/static/redis.log
+# log "Redis 启动成功"
 
 log "启动 http-server 服务..."
 http-server $HTTP_SERVER_ROOT -p 7862 --cors --log-ip true > $HOME_DIR/static/http-server.log 2>&1 &
