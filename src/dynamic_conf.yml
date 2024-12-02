@@ -1,18 +1,13 @@
 http:
   routers:
     nocodb:
-      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`) && !PathPrefix(`/api-exec`)"
+      rule: "PathPrefix(`/`) && !PathPrefix(`/serve`)"
       service: nocodb
     serve:
       rule: "PathPrefix(`/serve`)"
       service: serve
       middlewares:
         - serve-stripprefix
-    api-exec:
-      rule: "PathPrefix(`/api-exec`)"
-      service: api-exec
-      middlewares:
-        - api-exec-stripprefix
   services:
     nocodb:
       loadBalancer:
@@ -22,17 +17,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:7862"
-    api-exec:
-      loadBalancer:
-        servers:
-          - url: "http://127.0.0.1:3001"
   middlewares:
     serve-stripprefix:
       stripPrefix:
         prefixes:
           - "/serve"
-    api-exec-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/api-exec"
-

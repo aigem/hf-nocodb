@@ -1,17 +1,20 @@
 #!/bin/sh
 set -e
 
-# 保存当前工作目录
-ORIGINAL_DIR=$(pwd)
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
 
 # 导入 /etc/profile.d/s3_env.sh
 if [ -f /etc/profile.d/s3_env.sh ]; then
     source /etc/profile.d/s3_env.sh
+    log "已导入 s3_env 环境变量"
 fi
 
-log() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
-}
+if [ -f $HOME_DIR/.nocodb_env ]; then
+    source $HOME_DIR/.nocodb_env
+    log "已导入 .nocodb_env 环境变量"
+fi
 
 log "启动 PostgreSQL..."
 pg_ctl -D /usr/app/data/pgdata -l $HOME_DIR/static/postgresql.log start
@@ -86,27 +89,6 @@ if [ ! -f "$HOME_DIR/app/traefik/traefik.yml" ] || [ ! -f "$HOME_DIR/app/traefik
 fi
 sleep 5
 log "Traefik 启动成功"
-
-log "启动 api-exec..."
-
-# 切换到 api-exec 应用目录
-cd $HOME_DIR/app/api-exec
-
-# 检查 package.json 是否存在
-if [ ! -f "package.json" ]; then
-    log "错误：api-exec 目录中找不到 package.json 文件"
-    exit 1
-fi
-
-# 使用 NODE_ENV=production 来确保在生产模式下运行
-NODE_ENV=production node server.js > $HOME_DIR/static/api-exec.log 2>&1 &
-API_EXEC_PID=$!
-sleep 2
-log "api-exec 进程 ID: $API_EXEC_PID"
-log "api-exec 启动成功"
-
-# 返回原来的工作目录
-cd "$ORIGINAL_DIR"
 
 log "检查是否需要恢复备份..."
 
