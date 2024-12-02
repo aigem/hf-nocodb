@@ -5,7 +5,7 @@ ARG CACHEBUST=11
 # 设置环境变量
 ENV WORKDIR=/usr/src/app \
     USER=nocodb \
-    HOME_DIR=/home/$USER \
+    HOME_DIR=/home/nocodb \
     PORT=7861 \
     RESTORE_BACKUP=false \
     HTTP_SERVER_ROOT=/home/nocodb/static
