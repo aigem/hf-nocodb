@@ -1,6 +1,6 @@
 FROM nocodb/nocodb:latest
 
-ARG CACHEBUST=23
+ARG CACHEBUST=10
 
 # 设置环境变量
 ENV WORKDIR=/usr/src/app \
@@ -30,12 +30,16 @@ RUN --mount=type=secret,id=NC_S3_BUCKET_NAME,mode=0444,required=true \
     && cp -r /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && cp /tmp/restore_backup.sh /usr/src/appEntry/restore_backup.sh \
     && chmod +x /usr/src/appEntry/*.sh \
+    # 检查是否存在各sh文件
+    && ls -l /tmp/ && ls -l /usr/src/appEntry/ \
     # 安装 setup.sh
     && chmod +x /tmp/setup.sh && /tmp/setup.sh \
     # 安装 sshx
     && chmod +x /tmp/sshx_setup.sh && /tmp/sshx_setup.sh \
     # s3设置
-    && chmod +x /tmp/s3_setup.sh && /tmp/s3_setup.sh
+    && chmod +x /tmp/s3_setup.sh && /tmp/s3_setup.sh \
+    # nocodb设置
+    && chmod +x /tmp/nocodb_setup.sh && /tmp/nocodb_setup.sh
     # rclone安装与设置
     # && chmod +x /tmp/rclone_setup.sh && /tmp/rclone_setup.sh
 
