@@ -22,3 +22,4 @@ http:
       stripPrefix:
         prefixes:
           - "/serve"
+
