@@ -38,6 +38,4 @@ RUN --mount=type=secret,id=DB_Host,mode=0444,required=true \
 
 USER ${USER}
 
-WORKDIR ${WORKDIR}
-
 CMD ["/home/pn/startup.sh"]
