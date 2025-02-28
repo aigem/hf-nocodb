@@ -13,6 +13,7 @@ pinned: false
 ### 支持 数据持久化，部署简单，部署后数据仍然保留。
 
 ## 【[视频教程：]()】
+
 ## 一键部署【推荐】
 
 在本项目的 [Spaces](https://huggingface.co/spaces/fuliai/nocodb) 中，点击右上角 [复制Spaces](https://huggingface.co/spaces/fuliai/nocodb) 按钮即可完成部署。

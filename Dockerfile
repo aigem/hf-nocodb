@@ -15,7 +15,7 @@ RUN --mount=type=secret,id=DB_Host,mode=0444,required=true \
     --mount=type=secret,id=DB_User,mode=0444,required=true \
     --mount=type=secret,id=DB_Password,mode=0444,required=true \
     --mount=type=secret,id=DB_Database,mode=0444,required=true \
-    && git clone -b pro https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
+    && git clone -b new https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
     # 复制src下的所有文件夹及文件到/tmp/
     && cp -r /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh /usr/src/appEntry/startup.sh \
     && chmod +x /usr/src/appEntry/*.sh \
