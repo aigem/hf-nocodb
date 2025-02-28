@@ -9,8 +9,10 @@ pinned: false
 
 # hf-nocodb
 
-### 在 HuggingFace 上部署 NocoDB，开源版本的 AirTable。支持 S3 数据持久化，部署简单，部署后数据仍然保留。我们使用 Cloudflare R2 作为 S3 对象存储。
+### 在 HuggingFace 上部署 NocoDB，AirTable的开源平替。
+### 支持 数据持久化，部署简单，部署后数据仍然保留。
 
+## 【[视频教程：]()】
 ## 一键部署【推荐】
 
 在本项目的 [Spaces](https://huggingface.co/spaces/fuliai/nocodb) 中，点击右上角 [复制Spaces](https://huggingface.co/spaces/fuliai/nocodb) 按钮即可完成部署。
