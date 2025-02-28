@@ -40,4 +40,4 @@ USER ${USER}
 
 WORKDIR ${WORKDIR}
 
-CMD ["${HOME_DIR}/startup.sh"]
+CMD ["/home/pn/startup.sh"]
