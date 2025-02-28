@@ -8,4 +8,4 @@ fi
 export NC_DB="pg://$DB_HOST:$DB_PORT?u=$DB_USER&p=$DB_PASSWORD&d=$DB_DATABASE"
 
 echo "启动 NocoDB..."
-$HOME_DIR/start.sh
+$HOME_DIR/nocodb
