@@ -2,7 +2,7 @@
 set -e
 
 # 创建用户和目录
-adduser -D -u 1000 nocodb
+adduser --disabled-password -u 1000 nocodb
 mkdir -p /usr/app/data
 chown -R nocodb:nocodb /usr/app /usr/src/app /usr /var/log
 
