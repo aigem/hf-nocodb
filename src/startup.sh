@@ -10,10 +10,12 @@ fi
 export NC_DB="pg://$DB_HOST:$DB_PORT?u=$DB_USER&p=$DB_PASSWORD&d=$DB_DATABASE"
 
 # 检查nocodb二进制文件是否存在
-if [ ! -f "$HOME_DIR/nocodb" ]; then
-    echo "错误：nocodb二进制文件不存在，请确保setup.sh已正确执行"
-    exit 1
-fi
+# if [ ! -f "$HOME_DIR/nocodb" ]; then
+#     echo "错误：nocodb二进制文件不存在，请确保setup.sh已正确执行"
+#     exit 1
+# fi
 
 echo "启动 NocoDB..."
-exec $HOME_DIR/nocodb
+# exec $HOME_DIR/nocodb
+cd $HOME_DIR/nocodb
+pnpm start:backend
