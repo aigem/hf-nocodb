@@ -18,7 +18,7 @@ pinned: false
 
 打开本项目的 [Spaces](https://huggingface.co/spaces/fuliai/nocodb) ，点击右上角 【复制Spaces】 按钮；
 创建页面中填入你实际的账号名及空间名；
-填入supabase的数据库数据即可完成部署。
+填入supabase的数据库数据即可完成部署。supabase官网：[https://supabase.com](https://supabase.com)
 
 ### [一键复制本项目地址](https://huggingface.co/spaces/fuliai/nocodb)
 

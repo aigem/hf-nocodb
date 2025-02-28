@@ -6,9 +6,8 @@ ARG CACHEBUST=1
 ENV WORKDIR=/usr/src/app \
     USER=nocodb \
     HOME_DIR=/home/nocodb \
-    PORT=7861 \
-    RESTORE_BACKUP=false \
-    HTTP_SERVER_ROOT=/home/nocodb/static
+    PORT=7860 \
+    RESTORE_BACKUP=false
 
 RUN --mount=type=secret,id=DB_Host,mode=0444,required=true \
     --mount=type=secret,id=DB_Port,mode=0444,required=true \
