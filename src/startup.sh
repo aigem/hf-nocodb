@@ -5,7 +5,7 @@ if [ -f $HOME_DIR/.nocodb_env ]; then
     . $HOME_DIR/.nocodb_env
 fi
 
-export NC_DB="pg://DB_HOST:DB_PORT?u=postgres.fqplqapddfubtdhwpbxt&p=password&d=root_db"
-://DB_HOST:6543/postgres?user=postgres.fqplqapddfubtdhwpbxt&password=[YOUR-PASSWORD]
+export NC_DB="pg://$DB_HOST:$DB_PORT?u=$DB_USER&p=$DB_PASSWORD&d=$DB_DATABASE"
+
 echo "启动 NocoDB..."
-/usr/src/appEntry/start.sh
+$HOME_DIR/start.sh

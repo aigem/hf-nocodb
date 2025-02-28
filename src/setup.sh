@@ -1,12 +1,9 @@
 #!/bin/sh
 set -e
-
-# 创建用户和目录
-adduser --disabled-password -u 1000 nocodb
-mkdir -p /usr/app/data
-chown -R nocodb:nocodb /usr/app /usr/src/app /usr /var/log
-
 # 安装软件包
-apk add --no-cache dasel dumb-init nodejs npm curl python
+apt-get update && apt-get install -y dasel dumb-init nodejs npm curl python3 python3-pip
+
+cd $HOME_DIR
+curl http://get.nocodb.com/linux-x64 -o nocodb -L && chmod +x nocodb
 
 echo "NocoDB 安装初始化完成"
