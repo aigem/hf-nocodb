@@ -40,4 +40,4 @@ USER ${USER}
 
 WORKDIR ${WORKDIR}
 
-CMD ["/usr/src/appEntry/startup.sh"]
+CMD ["${HOME_DIR}/startup.sh"]
