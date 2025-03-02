@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo
+
 # 创建必要的目录
 mkdir -p /usr/app /usr/src/app
 
@@ -12,4 +14,6 @@ chown node:node /home/node/.nocodb_env
 chmod 600 /home/node/.nocodb_env
 chown -R node:node /usr/app /usr/src/app
 chmod -R 755 /usr/app /usr/src/app
-chmod +x /usr/src/appEntry/start.sh
+chmod +x /usr/src/appEntry/startup.sh
+
+echo "环境变量配置完成"

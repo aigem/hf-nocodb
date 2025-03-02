@@ -1,10 +1,16 @@
 FROM nocodb/nocodb:latest
 
-# 切换用户并配置权限
-USER root
+# 添加镜像元信息
+LABEL maintainer="ai来事"
+LABEL description="NocoDB是一个开源的Airtable替代方案，可以将任何MySQL、PostgreSQL、SQL Server、SQLite和MariaDB转换为智能电子表格。免费、开源、无限制。"
+LABEL video.tutorial="https://www.bilibili.com/video/BV1SP2mYBEjC/"
+LABEL github.repository="https://github.com/aigem/hf-nocodb"
 
 # 构建参数（默认值可替换，替换为其它值来重新进行部署）
 ARG CACHEBUST=12
+
+# 切换用户并配置权限
+USER root
 
 ARG DB_POSTGRESDB_SCHEMA=$DB_POSTGRESDB_SCHEMA
 ARG DB_POSTGRESDB_HOST=$DB_POSTGRESDB_HOST
