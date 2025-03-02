@@ -1,41 +1,32 @@
-FROM nikolaik/python-nodejs:python3.12-nodejs22
+FROM nocodb/nocodb:latest
 
-# 添加 CACHEBUST 参数
-ARG CACHEBUST=1
+# 切换用户并配置权限
+USER root
 
-ENV USER=pn \
-    HOME_DIR=/home/pn \
-    PORT=7860
+# 构建参数（默认值可替换，替换为其它值来重新进行部署）
+ARG CACHEBUST=12
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    apt-utils \
-    build-essential \
-    libpq-dev \
-    neofetch \
-    git \
-    curl \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
+ARG DB_POSTGRESDB_SCHEMA=$DB_POSTGRESDB_SCHEMA
+ARG DB_POSTGRESDB_HOST=$DB_POSTGRESDB_HOST
+ARG DB_POSTGRESDB_DATABASE=$DB_POSTGRESDB_DATABASE
+ARG DB_POSTGRESDB_PORT=$DB_POSTGRESDB_PORT
+ARG DB_POSTGRESDB_USER=$DB_POSTGRESDB_USER
+ARG DB_POSTGRESDB_PASSWORD=$DB_POSTGRESDB_PASSWORD
 
-WORKDIR ${HOMEDIR}
+# 下载脚本文件
+RUN curl -o /tmp/setup.sh https://raw.githubusercontent.com/aigem/hf-nocodb/new/setup.sh && \
+    curl -o /tmp/start.sh https://raw.githubusercontent.com/aigem/hf-nocodb/new/start.sh && \
+    mv /tmp/setup.sh /usr/src/appEntry/ && \
+    mv /tmp/start.sh /usr/src/appEntry/ && \
+    chmod +x /usr/src/appEntry/setup.sh /usr/src/appEntry/start.sh
 
-RUN --mount=type=secret,id=DB_Host,mode=0444,required=true \
-    --mount=type=secret,id=DB_Port,mode=0444,required=true \
-    --mount=type=secret,id=DB_User,mode=0444,required=true \
-    --mount=type=secret,id=DB_Password,mode=0444,required=true \
-    --mount=type=secret,id=DB_Database,mode=0444,required=true \
-    apt-get update && apt-get install -y git curl \
-    && git clone -b new https://github.com/aigem/hf-nocodb.git /tmp/hf-nocodb \
-    # 复制src下的所有文件夹及文件到/tmp/
-    && cp -r /tmp/hf-nocodb/src/* /tmp/ && cp /tmp/startup.sh ${HOME_DIR}/startup.sh \
-    && chmod +x ${HOME_DIR}/*.sh \
-    # 检查是否存在各sh文件
-    && ls -l /tmp/ && ls -l ${HOME_DIR}/ \
-    # 安装 setup.sh
-    && chmod +x /tmp/setup.sh && /tmp/setup.sh \
-    # 环境变量设置
-    && chmod +x /tmp/env_setup.sh && /tmp/env_setup.sh
+# 执行设置脚本
+RUN --mount=type=secret,id=DB_POSTGRESDB_USER,mode=0444,required=true \
+    --mount=type=secret,id=DB_POSTGRESDB_PASSWORD,mode=0444,required=true \
+    /usr/src/appEntry/setup.sh
 
-USER ${USER}
+# 切换回 node 用户
+USER node
 
-CMD ["/home/pn/startup.sh"]
+# 运行时执行启动脚本
+CMD ["/usr/src/appEntry/start.sh"]
