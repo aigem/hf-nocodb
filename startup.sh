@@ -14,4 +14,5 @@ if [ -f /home/node/.nocodb_env ]; then
 fi
 
 # 启动应用
+echo "开始启动应用"
 /usr/src/appEntry/start.sh

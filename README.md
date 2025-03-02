@@ -11,7 +11,8 @@ app_port : 8080
 # hf-nocodb
 
 在 HuggingFace 上部署 NocoDB，AirTable的开源平替。支持数据持久化，部署后数据仍然保留。
-### [视频教程](https://www.bilibili.com/video/BV1SP2mYBEjC/)
+### [视频教程](https://www.bilibili.com/video/BV1UKXXYPEuH/)
+#### [图文教程](https://gamma.app/docs/nocodb-589bf8zapkagmss)
 
 ## 一键部署
 
@@ -34,11 +35,11 @@ app_port : 8080
 ## 常见问题
 
 - **数据库连接失败**：请检查Supabase数据库连接信息是否正确填写
-- **权限问题**：确保数据库用户具有足够的权限
 
 ## 相关链接
 
-- [视频教程](https://www.bilibili.com/video/BV1SP2mYBEjC/)
-- github项目地址：
+- [视频教程](https://www.bilibili.com/video/BV1UKXXYPEuH/)
+- [图文教程](https://gamma.app/docs/nocodb-589bf8zapkagmss)
+- [github项目地址](https://github.com/aigem/hf-nocodb/)
 - [一键复制地址](https://huggingface.co/spaces/fuliai/nocodb)
-- nocodb官网：https://nocodb.com/
+- [nocodb官网](https://nocodb.com/)

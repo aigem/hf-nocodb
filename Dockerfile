@@ -21,10 +21,10 @@ ARG DB_POSTGRESDB_PASSWORD=$DB_POSTGRESDB_PASSWORD
 
 # 下载脚本文件
 RUN curl -o /tmp/setup.sh https://raw.githubusercontent.com/aigem/hf-nocodb/new/setup.sh && \
-    curl -o /tmp/start.sh https://raw.githubusercontent.com/aigem/hf-nocodb/new/start.sh && \
+    curl -o /tmp/startup.sh https://raw.githubusercontent.com/aigem/hf-nocodb/new/startup.sh && \
     mv /tmp/setup.sh /usr/src/appEntry/ && \
-    mv /tmp/start.sh /usr/src/appEntry/ && \
-    chmod +x /usr/src/appEntry/setup.sh /usr/src/appEntry/start.sh
+    mv /tmp/startup.sh /usr/src/appEntry/ && \
+    chmod +x /usr/src/appEntry/setup.sh /usr/src/appEntry/startup.sh
 
 # 执行设置脚本
 RUN --mount=type=secret,id=DB_POSTGRESDB_USER,mode=0444,required=true \
@@ -35,4 +35,4 @@ RUN --mount=type=secret,id=DB_POSTGRESDB_USER,mode=0444,required=true \
 USER node
 
 # 运行时执行启动脚本
-CMD ["/usr/src/appEntry/start.sh"]
+CMD ["/usr/src/appEntry/startup.sh"]

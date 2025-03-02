@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo
+echo "开始配置环境变量"
 
 # 创建必要的目录
 mkdir -p /usr/app /usr/src/app
